@@ -1,0 +1,3 @@
+# Tests directory
+
+This folder contains tests...

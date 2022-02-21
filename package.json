@@ -1,0 +1,23 @@
+{
+  "name": "binpacket",
+  "version": "0.0.1",
+  "description": "Binary data builder/parser with decorators support for structures definition",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "/node_modules/.bin/tsc",
+    "watch": "./node_modules/.bin/tsc --watch",
+    "test": "./node_modules/.bin/mocha -r ts-node/register ./test/**/*.test.ts",
+    "lint": "./node_modules/.bin/eslint --ext ts"
+  },
+  "author": "Zelbov",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^9.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "chai": "^4.3.6",
+    "mocha": "^9.2.1",
+    "ts-node": "^10.5.0"
+  }
+}
