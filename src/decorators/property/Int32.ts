@@ -7,7 +7,7 @@ export const Int32 : BinpacketPropertyDecorator =
 () => <ClassType extends Object>(target: ClassType, propertyKey: string | symbol) => 
 {
 
-    const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target.constructor.name)
+    const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)
 
     if(!stack)
         throw new Error(

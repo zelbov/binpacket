@@ -4,7 +4,7 @@ import { BinaryTransformMetadata } from "../types/TransformMetadata"
 
 export const serializeBinary = <ClassType extends Object>(from: ClassType) => {
 
-    const stack : BinaryTransformMetadata<ClassType, any>[] = getBinpacketMetadata<ClassType>(from.constructor.name)
+    const stack : BinaryTransformMetadata<ClassType, any>[] = getBinpacketMetadata<ClassType>(from)
 
     if(!stack)
         throw new Error(

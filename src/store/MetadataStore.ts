@@ -3,10 +3,22 @@ import { BinaryTransformMetadata } from "../types/TransformMetadata";
 
 const MetadataStore : BinaryStructureMetadataStore = {}
 
+let storeIdx = 0
+
 export const getBinpacketMetadata : 
-<ClassType extends Object>(target: string) => BinaryTransformMetadata<ClassType, any>[] =
+<ClassType extends Object>(target: ClassType) => BinaryTransformMetadata<ClassType, any>[] =
 (target) => {
-    if(!MetadataStore[target])
-        MetadataStore[target] = []
-    return MetadataStore[target]
+
+    const proto = Object.getPrototypeOf(target)
+
+    if(!proto.__bin_id) Object.defineProperty(proto, '__bin_id', {
+        value: (storeIdx++).toString(),
+        configurable: false,
+        enumerable: false,
+        writable: false,
+    })
+
+    if(!MetadataStore[proto.__bin_id])
+        MetadataStore[proto.__bin_id] = []
+    return MetadataStore[proto.__bin_id]
 }

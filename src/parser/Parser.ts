@@ -3,14 +3,14 @@ import { BinaryTransformMetadata } from "../types/TransformMetadata"
 
 export const parseBinary = <ResultType = Function>(data: Buffer, asType: new() => ResultType) => {
 
-    const stack : BinaryTransformMetadata<ResultType, any>[] = getBinpacketMetadata(asType.name)
+    const obj = new asType()
+
+    const stack : BinaryTransformMetadata<ResultType, any>[] = getBinpacketMetadata(obj)
 
     if(!stack)
         throw new Error(
             'Class '+asType.name+' has not been defined as binary data container. Use @Packet() decorator to identify it so.'
         )
-
-    const obj = new asType()
 
     let offset = 0
 
