@@ -7,21 +7,12 @@ export type BinpacketPropertyDecorator<
     },
     ClassType extends Object = Object
 > = 
-(options?: Options) => 
-(target: ClassType, propertyKey: string | symbol) => void
-
-export type BinpacketPropertyTypedDecorator<
-    Options extends {
-        [key: string] : any
-    },
-    ClassType extends Object = Object
-> = 
 <
     PropertyType extends Object,
     ArgsList extends Array<any> = ConstructorParameters<abstract new(...args: any) => PropertyType>    
 >(
-    propType: new(...args: ArgsList) => PropertyType,
-    options: Options,
-    templateArgs: ArgsList
+    options?: Options,
+    propType?: new(...args: ArgsList) => PropertyType,
+    initArgs?: ArgsList
 ) => 
 (target: ClassType, propertyKey: string | symbol) => void

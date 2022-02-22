@@ -1,20 +1,25 @@
 import { parseBinary, serializeBinary } from "../..";
 import { getBinpacketMetadata } from "../../store/MetadataStore";
-import { BinpacketPropertyTypedDecorator } from "../../types/Decorators";
+import { BinpacketPropertyDecorator } from "../../types/Decorators";
 import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "../../types/TransformMetadata";
 
-interface NestedDecoratorOptions {}
+export interface NestedDecoratorOptions {}
 
-export const NestedBinary : BinpacketPropertyTypedDecorator<NestedDecoratorOptions> =
-(propertyType, options, templateArgs) => 
+export const NestedBinary : BinpacketPropertyDecorator<NestedDecoratorOptions> =
+(options, propertyType, templateArgs) => 
 (target, propertyKey) => 
 {
+
+    if(!propertyType)
+        throw new Error('Missing property type initializer in @Nested decorator arguments')
 
     const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)!
 
     const propName = propertyKey as keyof typeof target
 
-    const nestedStack = getBinpacketMetadata(new propertyType(...templateArgs), false)
+    if(!templateArgs) templateArgs = [] as ConstructorParameters<abstract new(...args: any) => typeof propertyType>
+
+    const nestedStack = getBinpacketMetadata(new propertyType(...templateArgs!), false)
 
     if(!nestedStack)
         throw new Error(
