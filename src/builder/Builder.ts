@@ -6,9 +6,8 @@ export const serializeBinary = <ClassType extends Object>(from: ClassType) => {
 
     const stack : BinaryTransformMetadata<ClassType, any>[] = getBinpacketMetadata<ClassType>(from)
 
-
-    let allocateTotal = stack.reduce<number>((prev, curr) => {
-        return prev + curr.size
+    const allocateTotal = stack.reduce<number>((prev, curr) => {
+        return prev + (typeof(curr.size) == 'function' ? curr.size() : curr.size)
     }, 0)
 
     const buffer = Buffer.alloc(allocateTotal)
@@ -17,7 +16,7 @@ export const serializeBinary = <ClassType extends Object>(from: ClassType) => {
 
     stack.map(t => {
         t.write(buffer, from, offset)
-        offset += t.size
+        offset += (typeof(t.size) == 'function' ? t.size() : t.size)
     })
 
     return buffer

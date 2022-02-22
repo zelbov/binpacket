@@ -17,7 +17,7 @@ export const parseBinary = <ResultType = Function>(data: Buffer, asType: new() =
 
         obj[propName] = read(data, offset)
 
-        offset += size
+        offset += typeof(size) == 'function' ? size() : size
 
     }
 
