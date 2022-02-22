@@ -2,23 +2,24 @@ import { expect } from 'chai'
 import 'mocha'
 import { Int16, parseBinary, serializeBinary } from '../../src'
 
-class Foo {
-
-    @Int16()
-    int16!: number
-
-    @Int16({ bigEndian: true })
-    int16be!: number
-
-    @Int16({ unsigned: true })
-    uint16!: number
-
-    @Int16({ unsigned: true, bigEndian: true })
-    uint16be!: number
-
-}
-
 describe('Int16 decorators testing', () => {
+
+    class Foo {
+
+        @Int16()
+        int16!: number
+    
+        @Int16({ bigEndian: true })
+        int16be!: number
+    
+        @Int16({ unsigned: true })
+        uint16!: number
+    
+        @Int16({ unsigned: true, bigEndian: true })
+        uint16be!: number
+    
+    }
+    
 
     let obj: Foo
 

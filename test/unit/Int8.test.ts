@@ -2,17 +2,17 @@ import { expect } from 'chai'
 import 'mocha'
 import { Int8, parseBinary, serializeBinary } from '../../src'
 
-class Foo {
-
-    @Int8()
-    int8!: number
-
-    @Int8({ unsigned: true })
-    uint8!: number
-
-}
-
 describe('Int8 decorators testing', () => {
+
+    class Foo {
+
+        @Int8()
+        int8!: number
+    
+        @Int8({ unsigned: true })
+        uint8!: number
+    
+    }    
 
     let obj: Foo
 

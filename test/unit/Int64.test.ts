@@ -2,23 +2,23 @@ import { expect } from 'chai'
 import 'mocha'
 import { Int64, parseBinary, serializeBinary } from '../../src'
 
-class Foo {
-
-    @Int64()
-    int64!: number
-
-    @Int64({ bigEndian: true })
-    int64be!: number
-
-    @Int64({ unsigned: true })
-    uint64!: number
-
-    @Int64({ unsigned: true, bigEndian: true })
-    uint64be!: number
-
-}
-
 describe('Int64 decorators testing', () => {
+
+    class Foo {
+
+        @Int64()
+        int64!: number
+    
+        @Int64({ bigEndian: true })
+        int64be!: number
+    
+        @Int64({ unsigned: true })
+        uint64!: number
+    
+        @Int64({ unsigned: true, bigEndian: true })
+        uint64be!: number
+    
+    }
 
     let obj: Foo
 

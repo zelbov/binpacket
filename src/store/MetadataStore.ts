@@ -12,14 +12,20 @@ export const getBinpacketMetadata :
     const proto = target.constructor.prototype
 
     if(!proto.__bin_id) 
-        if(upsert)
+        if(upsert) {
+
             Object.defineProperty(proto, '__bin_id', {
                 value: (storeIdx++).toString(),
                 configurable: false,
                 enumerable: false,
                 writable: false,
             })
-        else return undefined
+        }
+        else {
+
+            return undefined
+
+        }
 
     if(!MetadataStore[proto.__bin_id])
         MetadataStore[proto.__bin_id] = []
