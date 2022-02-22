@@ -20,7 +20,7 @@ export const serializeBinary = <ClassType extends Object>(from: ClassType) => {
     let offset = 0
 
     stack.map(t => {
-        const wrote = t.write(buffer, from, offset)
+        const wrote = t.write(buffer, from, offset, t.propName)
         offset += wrote
     })
 
