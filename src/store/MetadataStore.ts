@@ -9,7 +9,7 @@ export const getBinpacketMetadata :
 <ClassType extends Object>(target: ClassType) => BinaryTransformMetadata<ClassType, any>[] =
 (target) => {
 
-    const proto = Object.getPrototypeOf(target)
+    const proto = target.constructor.prototype
 
     if(!proto.__bin_id) Object.defineProperty(proto, '__bin_id', {
         value: (storeIdx++).toString(),
