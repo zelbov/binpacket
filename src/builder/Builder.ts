@@ -6,10 +6,6 @@ export const serializeBinary = <ClassType extends Object>(from: ClassType) => {
 
     const stack : BinaryTransformMetadata<ClassType, any>[] = getBinpacketMetadata<ClassType>(from)
 
-    if(!stack)
-        throw new Error(
-            'Class '+from.constructor.name+' has not been defined as binary data container. Use @Packet() decorator to identify it so.'
-        )
 
     let allocateTotal = stack.reduce<number>((prev, curr) => {
         return prev + curr.size

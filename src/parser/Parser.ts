@@ -7,11 +7,6 @@ export const parseBinary = <ResultType = Function>(data: Buffer, asType: new() =
 
     const stack : BinaryTransformMetadata<ResultType, any>[] = getBinpacketMetadata(obj)
 
-    if(!stack)
-        throw new Error(
-            'Class '+asType.name+' has not been defined as binary data container. Use @Packet() decorator to identify it so.'
-        )
-
     let offset = 0
 
     for(let meta of stack) {
