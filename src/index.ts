@@ -5,6 +5,7 @@ import { Int64 } from "./decorators/property/Int64";
 import { parseBinary } from "./parser/Parser";
 import { serializeBinary } from "./builder/Builder";
 import { NestedBinary } from "./decorators/property/Nested";
+import { BinaryString } from './decorators/property/String'
 
 export {
 
@@ -16,6 +17,8 @@ export {
     Int16,
     Int32,
     Int64,
+
+    BinaryString,
 
     NestedBinary,
 
