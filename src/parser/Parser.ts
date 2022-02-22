@@ -6,17 +6,20 @@ interface ParseBinaryOptions<ArgsListType extends Array<any>> {
     args: ArgsListType
 }
 
-export const parseBinary = <ResultType = Function, ArgsListType extends Array<any> = any[]>(
+export const parseBinary = <
+    ResultType extends Object,
+    ArgsList extends Array<any> = ConstructorParameters<abstract new(...args: any) => ResultType>
+>(
     data: Buffer,
-    asType: new(...args: ArgsListType) => ResultType,
-    options: Partial<ParseBinaryOptions<ArgsListType>> = {}
+    asType: new(...args: ArgsList) => ResultType,
+    options: Partial<ParseBinaryOptions<ArgsList>> = {}
 ) => {
 
-    const args : ArgsListType = options
+    const args : ArgsList = options
         ? options.args
             ? options.args 
-            : [] as unknown as ArgsListType 
-        : [] as unknown as ArgsListType,
+            : [] as unknown as ArgsList 
+        : [] as unknown as ArgsList,
         sourceOffset = options ? options.sourceOffset || 0 : 0
 
     const obj = new asType(...args)

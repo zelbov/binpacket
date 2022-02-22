@@ -2,19 +2,33 @@ import { getBinpacketMetadata } from "../../store/MetadataStore"
 import { BinpacketPropertyDecorator } from "../../types/Decorators"
 import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "../../types/TransformMetadata"
 
+interface Int8DecoratorOptions {
 
-export const Int8 : BinpacketPropertyDecorator = 
-(options) => <ClassType extends Object>(target: ClassType, propertyKey: string | symbol) => 
+     /**
+      * 
+      * Whether a value representation should be unsigned.
+      * 
+      * Works with numeric values only
+      * 
+      * Default: `false`
+      * 
+      */
+     unsigned: boolean
+
+}
+
+export const Int8 : BinpacketPropertyDecorator<Partial<Int8DecoratorOptions>> = 
+(options = {}) => (target, propertyKey) => 
 {
 
     const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)!
 
     if(!options) options = {}
 
-    const propName = propertyKey as keyof ClassType
+    const propName = propertyKey as keyof typeof target
 
     let read : BinaryReadHandler<number>,
-        write: BinaryWriteHandler<ClassType>
+        write: BinaryWriteHandler<typeof target>
 
     switch(true) {
 

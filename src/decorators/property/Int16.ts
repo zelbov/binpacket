@@ -2,19 +2,41 @@ import { getBinpacketMetadata } from "../../store/MetadataStore"
 import { BinpacketPropertyDecorator } from "../../types/Decorators"
 import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "../../types/TransformMetadata"
 
+interface Int16DecoratorOptions {
 
-export const Int16 : BinpacketPropertyDecorator = 
-(options) => <ClassType extends Object>(target: ClassType, propertyKey: string | symbol) => 
+    /**
+     * Whether byte order should be BigEndian.
+     * 
+     * Default: `false`
+     * 
+     */
+     bigEndian: boolean
+
+     /**
+      * 
+      * Whether a value representation should be unsigned.
+      * 
+      * Works with numeric values only
+      * 
+      * Default: `false`
+      * 
+      */
+     unsigned: boolean
+
+}
+
+export const Int16 : BinpacketPropertyDecorator<Partial<Int16DecoratorOptions>> = 
+(options = {}) => (target, propertyKey) => 
 {
 
     const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)!
 
     if(!options) options = {}
 
-    const propName = propertyKey as keyof ClassType
+    const propName = propertyKey as keyof typeof target
 
     let read : BinaryReadHandler<number>,
-        write: BinaryWriteHandler<ClassType>
+        write: BinaryWriteHandler<typeof target>
 
     switch(true) {
 
