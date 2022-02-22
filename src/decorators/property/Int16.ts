@@ -3,7 +3,7 @@ import { BinpacketPropertyDecorator } from "../../types/Decorators"
 import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "../../types/TransformMetadata"
 
 
-export const Int32 : BinpacketPropertyDecorator = 
+export const Int16 : BinpacketPropertyDecorator = 
 (options) => <ClassType extends Object>(target: ClassType, propertyKey: string | symbol) => 
 {
 
@@ -19,26 +19,26 @@ export const Int32 : BinpacketPropertyDecorator =
     switch(true) {
 
         case !!options.bigEndian && !!options.unsigned:
-            read = (from, offset) => from.readUInt32BE(offset);
-            write = (to, source, offset) => to.writeUint32BE(+source[propName], offset);
+            read = (from, offset) => from.readUInt16BE(offset);
+            write = (to, source, offset) => to.writeUint16BE(+source[propName], offset);
             break;
         case !!options.bigEndian:
-            read = (from, offset) => from.readInt32BE(offset);
-            write = (to, source, offset) => to.writeInt32BE(+source[propName], offset);
+            read = (from, offset) => from.readInt16BE(offset);
+            write = (to, source, offset) => to.writeInt16BE(+source[propName], offset);
             break;
         case !!options.unsigned:
-            read = (from, offset) => from.readUint32LE(offset);
-            write = (to, source, offset) => to.writeUint32LE(+source[propName], offset);
+            read = (from, offset) => from.readUint16LE(offset);
+            write = (to, source, offset) => to.writeUint16LE(+source[propName], offset);
             break;
         default:
-            read = (from, offset) => from.readInt32LE(offset);
-            write = (to, source, offset) => to.writeInt32LE(+source[propName], offset);
+            read = (from, offset) => from.readInt16LE(offset);
+            write = (to, source, offset) => to.writeInt16LE(+source[propName], offset);
             break;
 
     }
 
     stack.push({
-        propName, size: 4,
+        propName, size: 2,
         read, write
     })
 

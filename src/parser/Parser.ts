@@ -5,7 +5,13 @@ export const parseBinary = <ResultType = Function>(data: Buffer, asType: new() =
 
     const obj = new asType()
 
-    const stack : BinaryTransformMetadata<ResultType, any>[] = getBinpacketMetadata(obj)
+    const stack : BinaryTransformMetadata<ResultType, any>[] | undefined = getBinpacketMetadata(obj, false)
+
+    if(!stack)
+        throw new Error(
+            'Class '+asType.constructor.name+' has not been defined as binary data container. '+
+            'Use at least one binary structure decorator to identify it so.'
+        )
 
     let offset = 0
 

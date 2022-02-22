@@ -18,7 +18,7 @@ class Foo {
 
 }
 
-describe('Integers decorators testing', () => {
+describe('Int32 decorators testing', () => {
 
     let obj: Foo
 
