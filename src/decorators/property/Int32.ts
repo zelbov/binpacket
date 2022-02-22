@@ -41,20 +41,20 @@ export const Int32 : BinpacketPropertyDecorator<Partial<Int32DecoratorOptions>> 
     switch(true) {
 
         case !!options.bigEndian && !!options.unsigned:
-            read = (from, offset) => from.readUInt32BE(offset);
-            write = (to, source, offset) => to.writeUint32BE(+source[propName], offset);
+            read = (from, offset) => [from.readUInt32BE(offset), 4];
+            write = (to, source, offset) => to.writeUint32BE(+source[propName], offset) - offset;
             break;
         case !!options.bigEndian:
-            read = (from, offset) => from.readInt32BE(offset);
-            write = (to, source, offset) => to.writeInt32BE(+source[propName], offset);
+            read = (from, offset) => [from.readInt32BE(offset), 4];
+            write = (to, source, offset) => to.writeInt32BE(+source[propName], offset) - offset;
             break;
         case !!options.unsigned:
-            read = (from, offset) => from.readUint32LE(offset);
-            write = (to, source, offset) => to.writeUint32LE(+source[propName], offset);
+            read = (from, offset) => [from.readUint32LE(offset), 4];
+            write = (to, source, offset) => to.writeUint32LE(+source[propName], offset) - offset;
             break;
         default:
-            read = (from, offset) => from.readInt32LE(offset);
-            write = (to, source, offset) => to.writeInt32LE(+source[propName], offset);
+            read = (from, offset) => [from.readInt32LE(offset), 4];
+            write = (to, source, offset) => to.writeInt32LE(+source[propName], offset) - offset;
             break;
 
     }

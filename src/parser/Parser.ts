@@ -38,15 +38,16 @@ export const parseBinary = <
 
         const propName : keyof ResultType = meta.propName
 
-        const { size, read } = meta
+        const { read } = meta,
+            [value, length] = read(data, offset + sourceOffset)
 
-        obj[propName] = read(data, offset + sourceOffset)
+        obj[propName] = value
 
-        offset += typeof(size) == 'function' ? size() : size
+        offset += length
 
     }
 
-    return obj as ResultType
+    return [obj, offset] as [ResultType, number]
 
 }
 

@@ -21,18 +21,26 @@ export const NestedBinary : BinpacketPropertyTypedDecorator<NestedDecoratorOptio
             'Nested binary structure of type '+propertyType.name+' has no binary structure initializers'
         )
         
-    const size = nestedStack.reduce<number>((prev, curr) => 
-        prev + (typeof(curr.size) == 'function' ? curr.size() : curr.size), 0
+    const size = (source: typeof propertyType) => nestedStack.reduce<number>((prev, curr) => 
+        prev + ((+curr.size) || (curr.size as Function)(source)), 0
     )
 
     let read : BinaryReadHandler<Object>,
         write: BinaryWriteHandler<typeof target>
 
-    read = (from, offset) => parseBinary(
-        from, propertyType,
-        { sourceOffset: offset, args: templateArgs }
-    )
-    write = (to, source, offset) => to.fill(serializeBinary(source[propName]), offset)
+    read = (from, offset) => {
+        const [obj, len] = 
+            parseBinary(
+                from, propertyType,
+                { sourceOffset: offset, args: templateArgs }
+            )
+        return [obj, len]
+    }
+    write = (to, source, offset) => {
+        const sub = serializeBinary(source[propName])
+        to.fill(sub, offset)
+        return sub.length
+    }
 
     stack.push({
         propName, size, read, write

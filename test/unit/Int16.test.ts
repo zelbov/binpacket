@@ -34,7 +34,9 @@ describe('Int16 decorators testing', () => {
 
         console.log(buffer)
 
-        obj = parseBinary(buffer, Foo)
+        const [result, len] = parseBinary(buffer, Foo)
+
+        obj = result
 
         console.log(obj)
 

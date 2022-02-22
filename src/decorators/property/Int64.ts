@@ -41,26 +41,27 @@ export const Int64 : BinpacketPropertyDecorator<Partial<Int64DecoratorOptions>> 
     switch(true) {
 
         case !!options.bigEndian && !!options.unsigned:
-            read = (from, offset) => from.readBigUInt64BE(offset);
-            write = (to, source, offset) => to.writeBigUint64BE(BigInt(''+source[propName]), offset);
+            read = (from, offset) => [from.readBigUInt64BE(offset), 8];
+            write = (to, source, offset) => to.writeBigUint64BE(BigInt(''+source[propName]), offset) - offset
             break;
         case !!options.bigEndian:
-            read = (from, offset) => from.readBigInt64BE(offset);
-            write = (to, source, offset) => to.writeBigInt64BE(BigInt(''+source[propName]), offset);
+            read = (from, offset) => [from.readBigInt64BE(offset), 8];
+            write = (to, source, offset) => to.writeBigInt64BE(BigInt(''+source[propName]), offset) - offset;
             break;
         case !!options.unsigned:
-            read = (from, offset) => from.readBigUint64LE(offset);
-            write = (to, source, offset) => to.writeBigUint64LE(BigInt(''+source[propName]), offset);
+            read = (from, offset) => [from.readBigUint64LE(offset), 8];
+            write = (to, source, offset) => to.writeBigUint64LE(BigInt(''+source[propName]), offset) - offset;
             break;
         default:
-            read = (from, offset) => from.readBigInt64LE(offset);
-            write = (to, source, offset) => to.writeBigInt64LE(BigInt(''+source[propName]), offset);
+            read = (from, offset) => [from.readBigInt64LE(offset), 8];
+            write = (to, source, offset) => to.writeBigInt64LE(BigInt(''+source[propName]), offset) - offset;
             break;
 
     }
 
     stack.push({
-        propName, size: 8,
+        propName,
+        size: 8,
         read, write
     })
 

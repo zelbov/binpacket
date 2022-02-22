@@ -40,7 +40,9 @@ describe('NestedBinary unit testing', () => {
 
         console.log(buffer)
 
-        obj = parseBinary(buffer, Foo, { args: ['foo constructor prop'] })
+        const [result, len] = parseBinary(buffer, Foo, { args: ['foo constructor prop'] })
+
+        obj = result
 
         console.log(obj)
 

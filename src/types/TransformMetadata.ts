@@ -1,12 +1,12 @@
 
-export type BinaryReadHandler<ValueType> = (from: Buffer, offset: number) => ValueType
+export type BinaryReadHandler<ValueType> = (from: Buffer, offset: number) => [value: ValueType, length: number]
 
-export type BinaryWriteHandler<ClassType> = (to: Buffer, source: ClassType, offset: number) => void
+export type BinaryWriteHandler<ClassType> = (to: Buffer, source: ClassType, offset: number) => number
 
 export interface BinaryTransformMetadata<ClassType, ValueType>{
 
     propName: keyof ClassType
-    size: number | (() => number)
+    size: number | ((source: ValueType) => number)
     read: BinaryReadHandler<ValueType>
     write: BinaryWriteHandler<ClassType>
 
