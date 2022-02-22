@@ -1,7 +1,7 @@
 import { getBinpacketMetadata } from "../store/MetadataStore"
 import { BinaryTransformMetadata } from "../types/TransformMetadata"
 
-export const parseBinary = <ResultType = Function>(data: Buffer, asType: new() => ResultType) => {
+export const parseBinary = <ResultType = Function>(data: Buffer, asType: new() => ResultType, sourceOffset = 0) => {
 
     const obj = new asType()
 
@@ -21,7 +21,7 @@ export const parseBinary = <ResultType = Function>(data: Buffer, asType: new() =
 
         const { size, read } = meta
 
-        obj[propName] = read(data, offset)
+        obj[propName] = read(data, offset + sourceOffset)
 
         offset += typeof(size) == 'function' ? size() : size
 

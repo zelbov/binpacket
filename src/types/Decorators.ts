@@ -22,6 +22,16 @@ export interface BinpacketDecoratorInitOptions {
      */
     unsigned: boolean
 
+    /**
+     * 
+     * Property type initializer for `@Nested` properties
+     * Used to identify a type of nested class containing binary structure definitions
+     * 
+     * Default: `Object`
+     * 
+     */
+    type: new() => Object
+
 }
 
 export type BinpacketClassDecorator = () => ClassDecorator
