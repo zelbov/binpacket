@@ -1,9 +1,25 @@
 import { getBinpacketMetadata } from "../store/MetadataStore"
 import { BinaryTransformMetadata } from "../types/TransformMetadata"
 
-export const parseBinary = <ResultType = Function>(data: Buffer, asType: new() => ResultType, sourceOffset = 0) => {
+interface ParseBinaryOptions<ArgsListType extends Array<any>> {
+    sourceOffset: number 
+    args: ArgsListType
+}
 
-    const obj = new asType()
+export const parseBinary = <ResultType = Function, ArgsListType extends Array<any> = any[]>(
+    data: Buffer,
+    asType: new(...args: ArgsListType) => ResultType,
+    options: Partial<ParseBinaryOptions<ArgsListType>> = {}
+) => {
+
+    const args : ArgsListType = options
+        ? options.args
+            ? options.args 
+            : [] as unknown as ArgsListType 
+        : [] as unknown as ArgsListType,
+        sourceOffset = options ? options.sourceOffset || 0 : 0
+
+    const obj = new asType(...args)
 
     const stack : BinaryTransformMetadata<ResultType, any>[] | undefined = getBinpacketMetadata(obj, false)
 

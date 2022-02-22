@@ -6,17 +6,25 @@ describe('NestedBinary unit testing', () => {
 
     class Bar {
 
+        constructor(
+            private constructorProp: string
+        ){}
+
         @Int16()
         value!: number
     
     }
     
     class Foo {
+
+        constructor(
+            private constructorProp: string
+        ){}
     
         @Int32()
         baz!: number
     
-        @NestedBinary({ type: Bar })
+        @NestedBinary({ type: Bar, templateArgs: [null] })
         bar!: Bar
     
     }
@@ -32,7 +40,7 @@ describe('NestedBinary unit testing', () => {
 
         console.log(buffer)
 
-        obj = parseBinary(buffer, Foo)
+        obj = parseBinary(buffer, Foo, { args: ['foo constructor prop'] })
 
         console.log(obj)
 

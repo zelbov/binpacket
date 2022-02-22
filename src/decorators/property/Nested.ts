@@ -30,7 +30,10 @@ export const NestedBinary : BinpacketPropertyDecorator =
     let read : BinaryReadHandler<Object>,
         write: BinaryWriteHandler<ClassType>
 
-    read = (from, offset) => parseBinary(from, options.type!, offset)
+    read = (from, offset) => parseBinary(
+        from, options.type!, 
+        { sourceOffset: offset, args: options.templateArgs || [] }
+    )
     write = (to, source, offset) => to.fill(serializeBinary(source[propName]), offset)
 
     stack.push({

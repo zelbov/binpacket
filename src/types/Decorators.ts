@@ -1,5 +1,5 @@
 
-export interface BinpacketDecoratorInitOptions {
+export interface BinpacketDecoratorInitOptions<ArgsListType extends Array<any> = any[]>{
 
     [key: string]: any 
 
@@ -30,7 +30,18 @@ export interface BinpacketDecoratorInitOptions {
      * Default: `Object`
      * 
      */
-    type: new() => Object
+    type: new(...args: ArgsListType) => Object
+
+    /**
+     * 
+     * Default arguments used to instantiate template class instance
+     * Should be provided for classes with non-zero arguments count in constructor
+     * to instantiate a template class before further calculations of their binary structures
+     * 
+     * Default: `[]`
+     * 
+     */
+    templateArgs: ArgsListType
 
 }
 
