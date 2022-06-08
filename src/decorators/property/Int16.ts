@@ -2,7 +2,7 @@ import { getBinpacketMetadata } from "../../store/MetadataStore"
 import { BinpacketPropertyDecorator } from "../../types/Decorators"
 import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "../../types/TransformMetadata"
 
-interface Int16DecoratorOptions {
+export interface Int16DecoratorOptions {
 
     /**
      * Whether byte order should be BigEndian.
@@ -25,6 +25,30 @@ interface Int16DecoratorOptions {
 
 }
 
+export const readInt16LEHandler : BinaryReadHandler<number> = 
+(from, offset) => [from.readInt16LE(offset), 2]
+
+export const readInt16BEHandler : BinaryReadHandler<number> = 
+(from, offset) => [from.readInt16BE(offset), 2]
+
+export const readUInt16LEHandler : BinaryReadHandler<number> = 
+(from, offset) => [from.readUInt16LE(offset), 2]
+
+export const readUInt16BEHandler : BinaryReadHandler<number> = 
+(from, offset) => [from.readUInt16BE(offset), 2]
+
+export const writeInt16LEHandler : BinaryWriteHandler<Object> = 
+(to, source, offset, propName) => to.writeInt16LE(+source[propName], offset) - offset
+
+export const writeInt16BEHandler : BinaryWriteHandler<Object> = 
+(to, source, offset, propName) => to.writeInt16BE(+source[propName], offset) - offset
+
+export const writeUInt16LEHandler : BinaryWriteHandler<Object> = 
+(to, source, offset, propName) => to.writeUint16LE(+source[propName], offset) - offset
+
+export const writeUInt16BEHandler : BinaryWriteHandler<Object> = 
+(to, source, offset, propName) => to.writeUint16BE(+source[propName], offset) - offset
+
 export const Int16 : BinpacketPropertyDecorator<Partial<Int16DecoratorOptions>> = 
 (options = {}) => (target, propertyKey) => 
 {
@@ -41,20 +65,20 @@ export const Int16 : BinpacketPropertyDecorator<Partial<Int16DecoratorOptions>> 
     switch(true) {
 
         case !!options.bigEndian && !!options.unsigned:
-            read = (from, offset) => [from.readUInt16BE(offset), 2];
-            write = (to, source, offset) => to.writeUint16BE(+source[propName], offset) - offset;
+            read = readUInt16BEHandler
+            write = writeUInt16BEHandler
             break;
         case !!options.bigEndian:
-            read = (from, offset) => [from.readInt16BE(offset), 2];
-            write = (to, source, offset) => to.writeInt16BE(+source[propName], offset) - offset;
+            read = readInt16BEHandler
+            write = writeInt16BEHandler
             break;
         case !!options.unsigned:
-            read = (from, offset) => [from.readUint16LE(offset), 2];
-            write = (to, source, offset) => to.writeUint16LE(+source[propName], offset) - offset;
+            read = readUInt16LEHandler
+            write = writeUInt16LEHandler
             break;
         default:
-            read = (from, offset) => [from.readInt16LE(offset), 2];
-            write = (to, source, offset) => to.writeInt16LE(+source[propName], offset) - offset;
+            read = readInt16LEHandler
+            write = writeInt16LEHandler
             break;
 
     }

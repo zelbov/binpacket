@@ -2,7 +2,7 @@ import { getBinpacketMetadata } from "../../store/MetadataStore"
 import { BinpacketPropertyDecorator } from "../../types/Decorators"
 import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "../../types/TransformMetadata"
 
-interface Int32DecoratorOptions {
+export interface Int32DecoratorOptions {
 
     /**
      * Whether byte order should be BigEndian.
@@ -25,6 +25,34 @@ interface Int32DecoratorOptions {
 
 }
 
+export const readInt32LEHandler : BinaryReadHandler<number> = 
+(from, offset) => [from.readInt32LE(offset), 4]
+
+export const readInt32BEHandler : BinaryReadHandler<number> = 
+(from, offset) => [from.readInt32BE(offset), 4]
+
+export const readUInt32LEHandler : BinaryReadHandler<number> = 
+(from, offset) => [from.readUInt32LE(offset), 4]
+
+export const readUInt32BEHandler : BinaryReadHandler<number> = 
+(from, offset) => [from.readUInt32BE(offset), 4]
+
+export const writeInt32LEHandler : BinaryWriteHandler<Object> = 
+(to, source, offset, propName) => to.writeInt32LE(+source[propName], offset) - offset
+
+export const writeInt32BEHandler : BinaryWriteHandler<Object> = 
+(to, source, offset, propName) => to.writeInt32BE(+source[propName], offset) - offset
+
+export const writeUInt32LEHandler : BinaryWriteHandler<Object> = 
+(to, source, offset, propName) => to.writeUint32LE(+source[propName], offset) - offset
+
+export const writeUInt32BEHandler : BinaryWriteHandler<Object> = 
+(to, source, offset, propName) => to.writeUint32BE(+source[propName], offset) - offset
+
+
+
+
+
 export const Int32 : BinpacketPropertyDecorator<Partial<Int32DecoratorOptions>> = 
 (options = {}) => (target, propertyKey) => 
 {
@@ -38,26 +66,26 @@ export const Int32 : BinpacketPropertyDecorator<Partial<Int32DecoratorOptions>> 
     let read : BinaryReadHandler<number>,
         write: BinaryWriteHandler<typeof target>
 
-    switch(true) {
+        switch(true) {
 
-        case !!options.bigEndian && !!options.unsigned:
-            read = (from, offset) => [from.readUInt32BE(offset), 4];
-            write = (to, source, offset) => to.writeUint32BE(+source[propName], offset) - offset;
-            break;
-        case !!options.bigEndian:
-            read = (from, offset) => [from.readInt32BE(offset), 4];
-            write = (to, source, offset) => to.writeInt32BE(+source[propName], offset) - offset;
-            break;
-        case !!options.unsigned:
-            read = (from, offset) => [from.readUint32LE(offset), 4];
-            write = (to, source, offset) => to.writeUint32LE(+source[propName], offset) - offset;
-            break;
-        default:
-            read = (from, offset) => [from.readInt32LE(offset), 4];
-            write = (to, source, offset) => to.writeInt32LE(+source[propName], offset) - offset;
-            break;
-
-    }
+            case !!options.bigEndian && !!options.unsigned:
+                read = readUInt32BEHandler
+                write = writeUInt32BEHandler
+                break;
+            case !!options.bigEndian:
+                read = readInt32BEHandler
+                write = writeInt32BEHandler
+                break;
+            case !!options.unsigned:
+                read = readUInt32LEHandler
+                write = writeUInt32LEHandler
+                break;
+            default:
+                read = readInt32LEHandler
+                write = writeInt32LEHandler
+                break;
+    
+        }
 
     stack.push({
         propName, size: 4,
