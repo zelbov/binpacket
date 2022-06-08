@@ -2,8 +2,14 @@ import { getBinpacketMetadata } from "../../store/MetadataStore";
 import { BinpacketPropertyDecorator } from "../../types/Decorators";
 import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "../../types/TransformMetadata";
 
-//TODO: BE/LE
-interface StringDecoratorOptions {
+export interface StringDecoratorOptions {
+
+    /**
+     * Sets BigEndian encoding for a string
+     * 
+     * Default: `false`
+     */
+    bigEndian: boolean
 
     /**
      * 
@@ -34,12 +40,125 @@ interface StringDecoratorOptions {
 
 }
 
+const STRING_ENDING_CONDITION_ERROR = 
+    '@String decorator options should contain `size` value or `nullTerminated` set to `true`'
+
+// Read handlers
+
+const readNullTerminatedLE : (encoding?: BufferEncoding) => BinaryReadHandler<string>
+= (encoding) => (from, offset) => {
+
+    let readOffset = offset
+
+    let string = '', char = from.toString(encoding || 'utf-8', readOffset, readOffset + 1)
+
+    while(char != '\x00') {
+        string += char
+        readOffset += 1
+        char = from.toString(encoding || 'utf-8', readOffset, readOffset + 1)
+    }
+
+    return [string, string.length + 1];
+
+}
+
+const readNullTerminatedBE : (encoding?: BufferEncoding) => BinaryReadHandler<string>
+= (encoding) => (from, offset) => {
+
+    let readOffset = offset
+
+    let string = '', char = from.toString(encoding || 'utf-8', readOffset, readOffset + 1)
+
+    while(char != '\x00') {
+        string += char
+        readOffset += 1
+        char = from.toString(encoding || 'utf-8', readOffset, readOffset + 1)
+    }
+
+    string = Buffer.from(string).reverse().toString()
+
+    return [string, string.length + 1];
+
+}
+
+const readStaticLE : (size: number, encoding?: BufferEncoding) => BinaryReadHandler<string>
+= (size, encoding) => (from, offset) => {
+
+    const str = from.toString(encoding || 'utf-8', offset, offset + size).replace(/\x00|\u0000$/g, '')
+
+    return [ str, size ]
+
+}
+
+const readStaticBE : (size: number, encoding?: BufferEncoding) => BinaryReadHandler<string>
+= (size, encoding) => (from, offset) => {
+
+    const str = Buffer.from(
+        from.toString(encoding || 'utf-8', offset, offset + size).replace(/\x00|\u0000$/g, '')
+    ).reverse().toString()
+
+    return [ str, size ]
+
+}
+
+// Write handlers
+
+const writeNullTerminatedLE : <SourceType>(
+    propName: keyof SourceType,
+    encoding?: BufferEncoding
+) => BinaryWriteHandler<SourceType> =
+(propName, encoding) => (to, source, offset) => {
+
+    return to.write(''+source[propName]+'\x00', offset, encoding || 'utf-8')
+
+}
+
+const writeNullTerminatedBE : <SourceType>(
+    propName: keyof SourceType,
+    encoding?: BufferEncoding
+) => BinaryWriteHandler<SourceType> = 
+(propName, encoding) => (to, source, offset) => {
+
+    const rev = Buffer.from(''+source[propName]).reverse()
+
+    return to.write(rev.toString()+'\x00', offset, encoding || 'utf-8')
+
+}
+
+const writeStaticLE : <SourceType>(
+    propName: keyof SourceType,
+    size: number,
+    encoding?: BufferEncoding
+) => BinaryWriteHandler<SourceType> = 
+(propName, size, encoding) => (to, source, offset) => {
+
+    /*return*/ to.write(''+source[propName], offset, size, encoding || 'utf-8')
+    return size
+
+}
+
+const writeStaticBE : <SourceType>(
+    propName: keyof SourceType,
+    size: number,
+    encoding?: BufferEncoding
+) => BinaryWriteHandler<SourceType> = 
+(propName, size, encoding) => (to, source, offset) => {
+
+    const rev = Buffer.from(''+source[propName]).reverse()
+
+    /*return*/ to.write(rev.toString(), offset, size, encoding || 'utf-8')
+    return size
+
+}
+
 export const BinaryString : BinpacketPropertyDecorator<Partial<StringDecoratorOptions>> =
-(options = { nullTerminated: true, encoding: 'utf-8' }) => (target, propertyKey) => {
+(options = { nullTerminated: true }) => (target, propertyKey) => {
 
     const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)!
 
-    if(!options) options = { nullTerminated: true, encoding: 'utf-8' }
+    if(!options) options = { nullTerminated: true }
+    if(!options.bigEndian) options.bigEndian = false;
+    if(typeof(options.nullTerminated) == 'undefined' && !options.size) options.nullTerminated = true
 
     const propName = propertyKey as keyof typeof target
 
@@ -48,54 +167,40 @@ export const BinaryString : BinpacketPropertyDecorator<Partial<StringDecoratorOp
 
     switch(true) {
 
-        case options.nullTerminated:
+        case !!options.nullTerminated:
 
-            read = (from, offset) => {
+            if(options.bigEndian === true) {
 
-                let readOffset = offset
+                read = readNullTerminatedBE(options.encoding)
+                write = writeNullTerminatedBE(propName, options.encoding)
 
-                let string = '', char = from.toString(options.encoding || 'utf-8', readOffset, readOffset + 1)
+            } else {
 
-                while(char != '\x00') {
-                    string += char
-                    readOffset += 1
-                    char = from.toString(options.encoding || 'utf-8', readOffset, readOffset + 1)
-                }
-
-                return [string, string.length + 1];
-
+                read = readNullTerminatedLE(options.encoding)
+                write = writeNullTerminatedLE(propName, options.encoding)
+            
             }
-
-            write = (to, source, offset) => {
-
-                return to.write(''+source[propName]+'\x00', offset, options.encoding || 'utf-8')
-
-            }
+            
             break;
 
         case !!options.size:
 
-            read = (from, offset) => {
+            if(options.bigEndian === true) {
 
-                const str = from.toString(options.encoding || 'utf-8', offset, offset + options.size!)
+                read = readStaticBE(options.size!, options.encoding)
+                write = writeStaticBE(propName, options.size!, options.encoding)
 
-                return [ str.replace(/\x00|\u0000$/g, ''), options.size! ]
+            } else {
 
-            }
-
-            write = (to, source, offset) => {
-
-                return to.write(''+source[propName], offset, options.size!, options.encoding || 'utf-8')
+                read = readStaticLE(options.size!, options.encoding)
+                write = writeStaticLE(propName, options.size!, options.encoding)
 
             }
-
             break;
 
         default:
 
-            throw new Error(
-                '@String decorator options should contain `size` value or `nullTerminated` set to `true`'
-            )
+            throw new Error(STRING_ENDING_CONDITION_ERROR)
 
     }
 
