@@ -3,7 +3,49 @@ import { getBinpacketMetadata } from "../../store/MetadataStore";
 import { BinpacketPropertyDecorator } from "../../types/Decorators";
 import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "../../types/TransformMetadata";
 
+const MISSING_PROP_INIT_ERROR = 
+    'Missing property initializer detected when tried to handle nested object binary reading';
+
+const MISSING_PROP_TYPE_INIT_ERROR = 
+    'Missing property type initializer in @NestedBinary decorator arguments';
+
 export interface NestedDecoratorOptions {}
+
+export const readBinaryNestedObjectHandler : 
+<PropertyType, ArgsList = ConstructorParameters<abstract new(...args: any) => PropertyType>>(
+    prop: {
+        type: new(...args: any) => PropertyType,
+        init?: ArgsList
+    }) => BinaryReadHandler<Object> = 
+(
+    prop
+) => {
+
+    return <PropertyType>(from: Buffer, offset: number) => {
+
+        if(!prop)
+            throw new Error(MISSING_PROP_INIT_ERROR)
+
+        const [obj, len] = 
+            parseBinary(
+                from, prop.type,
+                {
+                    sourceOffset: offset,
+                    args: (prop.init || []) as ConstructorParameters<abstract new(...args: any) => PropertyType>
+                }
+            )
+        return [obj, len]
+
+    }
+    
+}
+
+export const writeBinaryNestedObjectHandler : BinaryWriteHandler<Object> =
+(to, source, offset, propName) => {
+    const sub = serializeBinary(source[propName])
+    to.fill(sub, offset)
+    return sub.length
+}
 
 export const NestedBinary : BinpacketPropertyDecorator<NestedDecoratorOptions> =
 (options, propertyType, templateArgs) => 
@@ -11,7 +53,7 @@ export const NestedBinary : BinpacketPropertyDecorator<NestedDecoratorOptions> =
 {
 
     if(!propertyType)
-        throw new Error('Missing property type initializer in @Nested decorator arguments')
+        throw new Error(MISSING_PROP_TYPE_INIT_ERROR)
 
     const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)!
 
@@ -30,22 +72,8 @@ export const NestedBinary : BinpacketPropertyDecorator<NestedDecoratorOptions> =
         prev + ((+curr.size) || (curr.size as Function)(source)), 0
     )
 
-    let read : BinaryReadHandler<Object>,
-        write: BinaryWriteHandler<typeof target>
-
-    read = (from, offset) => {
-        const [obj, len] = 
-            parseBinary(
-                from, propertyType,
-                { sourceOffset: offset, args: templateArgs }
-            )
-        return [obj, len]
-    }
-    write = (to, source, offset) => {
-        const sub = serializeBinary(source[propName])
-        to.fill(sub, offset)
-        return sub.length
-    }
+    let read : BinaryReadHandler<Object> = readBinaryNestedObjectHandler({ type: propertyType, init: templateArgs }),
+        write: BinaryWriteHandler<typeof target> = writeBinaryNestedObjectHandler
 
     stack.push({
         propName, size, read, write
