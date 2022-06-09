@@ -6,7 +6,8 @@
   "scripts": {
     "build": "/node_modules/.bin/tsc",
     "watch": "./node_modules/.bin/tsc --watch",
-    "test": "./node_modules/.bin/mocha -r ts-node/register ./test/**/*.test.ts",
+    "test": "./node_modules/.bin/mocha -r ts-node/register ./test/unit/*.test.ts",
+    "bench": "./node_modules/.bin/mocha -r ts-node/register ./test/benchmark/*.test.ts",
     "lint": "./node_modules/.bin/eslint --ext ts"
   },
   "author": "Zelbov",
