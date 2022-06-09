@@ -6,6 +6,7 @@ import { parseBinary } from "./parser/Parser";
 import { serializeBinary } from "./builder/Builder";
 import { NestedBinary } from "./decorators/property/Nested";
 import { BinaryString } from './decorators/property/String'
+import { BinaryHeader, BinaryHeaderParser, BinaryHeaderSerializer } from "./decorators/class/BinaryHeader";
 
 export {
 
@@ -22,8 +23,14 @@ export {
 
     NestedBinary,
 
+    BinaryHeader,
+
     // Common functions
     parseBinary,
     serializeBinary,
+
+    // Types
+    BinaryHeaderParser,
+    BinaryHeaderSerializer
 
 }
