@@ -34,11 +34,11 @@ export const Int8 : BinpacketPropertyDecorator<Partial<Int8DecoratorOptions>> =
 
         case !!options.unsigned:
             read = (from, offset) => [from.readUInt8(offset), 1];
-            write = (to, source, offset) => to.writeUint8(+source[propName], offset) - offset;
+            write = (to, source, offset) => [to.writeUint8(+source[propName], offset) - offset, to];
             break;
         default:
             read = (from, offset) => [from.readInt8(offset), 1];
-            write = (to, source, offset) => to.writeInt8(+source[propName], offset) - offset;
+            write = (to, source, offset) => [to.writeInt8(+source[propName], offset) - offset, to];
             break;
 
     }

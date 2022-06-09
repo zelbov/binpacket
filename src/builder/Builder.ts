@@ -12,7 +12,7 @@ export const serializeBinary = <ClassType extends Object>(from: ClassType) => {
         )
 
     const allocateTotal = stack.reduce<number>((prev, curr) => 
-        prev + ((+curr.size) || (curr.size as Function)(from)), 0
+        prev + (curr.size !== 0 ? ((+curr.size) || (curr.size as Function)(from)) : 0), 0
     )
 
     let buffer = Buffer.alloc(allocateTotal)
@@ -20,7 +20,8 @@ export const serializeBinary = <ClassType extends Object>(from: ClassType) => {
     let offset = 0
 
     stack.map(t => {
-        const wrote = t.write(buffer, from, offset, t.propName)
+        const [wrote, result] = t.write(buffer, from, offset, t.propName)
+        buffer = result
         offset += wrote
     })
 

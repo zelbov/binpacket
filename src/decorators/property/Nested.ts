@@ -47,7 +47,7 @@ export const writeBinaryNestedObjectHandler : BinaryWriteHandler<Object> =
     if(!propName) throw new Error(NESTED_PROPERTY_DESCRIPTOR_ERROR)
     const sub = serializeBinary(source[propName])
     to.fill(sub, offset)
-    return sub.length
+    return [sub.length, to]
 }
 
 export const NestedBinary : BinpacketPropertyDecorator<NestedDecoratorOptions> =

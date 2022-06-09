@@ -38,16 +38,16 @@ export const readUInt64BEHandler : BinaryReadHandler<bigint> =
 (from, offset) => [from.readBigUInt64BE(offset), 8]
 
 export const writeInt64LEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeBigInt64LE(BigInt(''+(source[propName!] || 0)), offset) - offset
+(to, source, offset, propName) => [to.writeBigInt64LE(BigInt(''+(source[propName!] || 0)), offset) - offset, to]
 
 export const writeInt64BEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeBigInt64BE(BigInt(''+(source[propName!] || 0)), offset) - offset
+(to, source, offset, propName) => [to.writeBigInt64BE(BigInt(''+(source[propName!] || 0)), offset) - offset, to]
 
 export const writeUInt64LEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeBigUint64LE(BigInt(''+(source[propName!] || 0)), offset) - offset
+(to, source, offset, propName) => [to.writeBigUint64LE(BigInt(''+(source[propName!] || 0)), offset) - offset, to]
 
 export const writeUInt64BEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeBigUint64BE(BigInt(''+(source[propName!] || 0)), offset) - offset
+(to, source, offset, propName) => [to.writeBigUint64BE(BigInt(''+(source[propName!] || 0)), offset) - offset, to]
 
 
 export const Int64 : BinpacketPropertyDecorator<Partial<Int64DecoratorOptions>> = 

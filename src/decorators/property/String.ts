@@ -109,7 +109,7 @@ const writeNullTerminatedLE : <SourceType>(
 ) => BinaryWriteHandler<SourceType> =
 (propName, encoding) => (to, source, offset) => {
 
-    return to.write(''+source[propName]+'\x00', offset, encoding || 'utf-8')
+    return [to.write(''+source[propName]+'\x00', offset, encoding || 'utf-8'), to]
 
 }
 
@@ -121,7 +121,7 @@ const writeNullTerminatedBE : <SourceType>(
 
     const rev = Buffer.from(''+source[propName]).reverse()
 
-    return to.write(rev.toString()+'\x00', offset, encoding || 'utf-8')
+    return [to.write(rev.toString()+'\x00', offset, encoding || 'utf-8'), to]
 
 }
 
@@ -132,8 +132,8 @@ const writeStaticLE : <SourceType>(
 ) => BinaryWriteHandler<SourceType> = 
 (propName, size, encoding) => (to, source, offset) => {
 
-    /*return*/ to.write(''+source[propName], offset, size, encoding || 'utf-8')
-    return size
+    to.write(''+source[propName], offset, size, encoding || 'utf-8')
+    return [size, to]
 
 }
 
@@ -146,8 +146,8 @@ const writeStaticBE : <SourceType>(
 
     const rev = Buffer.from(''+source[propName]).reverse()
 
-    /*return*/ to.write(rev.toString(), offset, size, encoding || 'utf-8')
-    return size
+    to.write(rev.toString(), offset, size, encoding || 'utf-8')
+    return [size, to]
 
 }
 
