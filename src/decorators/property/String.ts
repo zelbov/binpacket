@@ -206,7 +206,11 @@ export const BinaryString : BinpacketPropertyDecorator<Partial<StringDecoratorOp
 
     stack.push({
         propName,
-        size: (source: string) => options.nullTerminated ? source.length + 1 : options.size || source.length,
+        size: (source: typeof target) => (
+            options.nullTerminated
+                ? source[propertyKey as keyof typeof target].length as number + 1
+                : options.size || source[propertyKey as keyof typeof target].length
+        ) as number,
         read, write
     })
 
