@@ -50,13 +50,8 @@ const readNullTerminatedLE : (encoding?: BufferEncoding) => BinaryReadHandler<st
 
     let readOffset = offset
 
-    let string = '', char = from.toString(encoding || 'utf-8', readOffset, readOffset + 1)
-
-    while(char != '\x00') {
-        string += char
-        readOffset += 1
-        char = from.toString(encoding || 'utf-8', readOffset, readOffset + 1)
-    }
+    let termIdx = from.indexOf('\x00', readOffset),
+        string = from.slice(readOffset, termIdx).toString(encoding || 'utf-8')
 
     return [string, string.length + 1];
 
@@ -67,15 +62,8 @@ const readNullTerminatedBE : (encoding?: BufferEncoding) => BinaryReadHandler<st
 
     let readOffset = offset
 
-    let string = '', char = from.toString(encoding || 'utf-8', readOffset, readOffset + 1)
-
-    while(char != '\x00') {
-        string += char
-        readOffset += 1
-        char = from.toString(encoding || 'utf-8', readOffset, readOffset + 1)
-    }
-
-    string = Buffer.from(string).reverse().toString()
+    let termIdx = from.indexOf('\x00', readOffset),
+        string = from.slice(readOffset, termIdx).reverse().toString(encoding || 'utf-8')
 
     return [string, string.length + 1];
 
