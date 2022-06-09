@@ -36,12 +36,12 @@ export const parseBinary = <
 
     for(let meta of stack) {
 
-        const propName : keyof ResultType = meta.propName
+        const propName : keyof ResultType | undefined = meta.propName
 
         const { read } = meta,
             [value, length] = read(data, offset + sourceOffset)
 
-        obj[propName] = value
+        propName ? obj[propName] = value : null
 
         offset += length
 

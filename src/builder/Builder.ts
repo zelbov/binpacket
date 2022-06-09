@@ -12,7 +12,7 @@ export const serializeBinary = <ClassType extends Object>(from: ClassType) => {
         )
 
     const allocateTotal = stack.reduce<number>((prev, curr) => 
-        prev + ((+curr.size) || (curr.size as Function)(from[curr.propName])), 0
+        prev + ((+curr.size) || curr.propName && (curr.size as Function)(from[curr.propName] || 0)), 0
     )
 
     let buffer = Buffer.alloc(allocateTotal)

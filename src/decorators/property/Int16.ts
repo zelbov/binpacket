@@ -38,16 +38,16 @@ export const readUInt16BEHandler : BinaryReadHandler<number> =
 (from, offset) => [from.readUInt16BE(offset), 2]
 
 export const writeInt16LEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeInt16LE(+source[propName], offset) - offset
+(to, source, offset, propName) => to.writeInt16LE(+source[propName!] || 0, offset) - offset
 
 export const writeInt16BEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeInt16BE(+source[propName], offset) - offset
+(to, source, offset, propName) => to.writeInt16BE(+source[propName!] || 0, offset) - offset
 
 export const writeUInt16LEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeUint16LE(+source[propName], offset) - offset
+(to, source, offset, propName) => to.writeUint16LE(+source[propName!] || 0, offset) - offset
 
 export const writeUInt16BEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeUint16BE(+source[propName], offset) - offset
+(to, source, offset, propName) => to.writeUint16BE(+source[propName!] || 0, offset) - offset
 
 export const Int16 : BinpacketPropertyDecorator<Partial<Int16DecoratorOptions>> = 
 (options = {}) => (target, propertyKey) => 

@@ -40,8 +40,11 @@ export const readBinaryNestedObjectHandler :
     
 }
 
+const NESTED_PROPERTY_DESCRIPTOR_ERROR = 'Nested property descriptor is undefined'
+
 export const writeBinaryNestedObjectHandler : BinaryWriteHandler<Object> =
 (to, source, offset, propName) => {
+    if(!propName) throw new Error(NESTED_PROPERTY_DESCRIPTOR_ERROR)
     const sub = serializeBinary(source[propName])
     to.fill(sub, offset)
     return sub.length

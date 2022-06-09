@@ -38,16 +38,16 @@ export const readUInt32BEHandler : BinaryReadHandler<number> =
 (from, offset) => [from.readUInt32BE(offset), 4]
 
 export const writeInt32LEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeInt32LE(+source[propName], offset) - offset
+(to, source, offset, propName) => to.writeInt32LE(+source[propName!] || 0, offset) - offset
 
 export const writeInt32BEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeInt32BE(+source[propName], offset) - offset
+(to, source, offset, propName) => to.writeInt32BE(+source[propName!] || 0, offset) - offset
 
 export const writeUInt32LEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeUint32LE(+source[propName], offset) - offset
+(to, source, offset, propName) => to.writeUint32LE(+source[propName!] || 0, offset) - offset
 
 export const writeUInt32BEHandler : BinaryWriteHandler<Object> = 
-(to, source, offset, propName) => to.writeUint32BE(+source[propName], offset) - offset
+(to, source, offset, propName) => to.writeUint32BE(+source[propName!] || 0, offset) - offset
 
 
 
