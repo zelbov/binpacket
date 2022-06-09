@@ -1,5 +1,5 @@
 
-export type BinpacketClassDecorator = () => ClassDecorator
+export type BinpacketClassDecorator<ArgsListType extends Array<any> = []> = (...args: ArgsListType) => ClassDecorator
 
 export type BinpacketPropertyDecorator<
     Options extends {
