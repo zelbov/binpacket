@@ -7,6 +7,8 @@ import { serializeBinary } from "./builder/Builder";
 import { NestedBinary } from "./decorators/property/Nested";
 import { BinaryString } from './decorators/property/String'
 import { BinaryHeader, BinaryHeaderParser, BinaryHeaderSerializer } from "./decorators/class/BinaryHeader";
+import { Float32 } from "./decorators/property/Float32";
+import { Float64 } from "./decorators/property/Float64";
 
 export {
 
@@ -18,6 +20,8 @@ export {
     Int16,
     Int32,
     Int64,
+    Float32,
+    Float64,
 
     BinaryString,
 
