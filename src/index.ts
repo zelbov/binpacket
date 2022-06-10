@@ -9,11 +9,12 @@ import { BinaryString } from './decorators/property/String'
 import { BinaryHeader, BinaryHeaderParser, BinaryHeaderSerializer } from "./decorators/class/BinaryHeader";
 import { Float32 } from "./decorators/property/Float32";
 import { Float64 } from "./decorators/property/Float64";
+import { BinaryArray } from "./decorators/property/Array";
 
 export {
 
     // Class decorators
-    //...
+    BinaryHeader,
     
     // Property decorators
     Int8,
@@ -27,7 +28,7 @@ export {
 
     NestedBinary,
 
-    BinaryHeader,
+    BinaryArray,
 
     // Common functions
     parseBinary,
