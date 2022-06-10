@@ -11,7 +11,7 @@ export type BinaryWriteHandler<ClassType> = (
 export interface BinaryTransformMetadata<ClassType, ValueType>{
 
     propName?: keyof ClassType
-    size: number | ((source: ValueType) => number)
+    size: number | ((source: ValueType, propName: keyof ValueType) => number)
     read: BinaryReadHandler<ValueType>
     write: BinaryWriteHandler<ClassType>
 

@@ -50,7 +50,37 @@ export const writeUInt32BEHandler : BinaryWriteHandler<Object> =
 (to, source, offset, propName) => [to.writeUint32BE(+source[propName!] || 0, offset) - offset, to]
 
 
+export const getInt32Handlers 
+: (options: Partial<Int32DecoratorOptions>) => { read: BinaryReadHandler<number>, write: BinaryWriteHandler<any>, size: number }
+= (options) => {
 
+    let read : BinaryReadHandler<number>,
+        write: BinaryWriteHandler<any>
+
+    switch(true) {
+
+        case !!options.bigEndian && !!options.unsigned:
+            read = readUInt32BEHandler
+            write = writeUInt32BEHandler
+            break;
+        case !!options.bigEndian:
+            read = readInt32BEHandler
+            write = writeInt32BEHandler
+            break;
+        case !!options.unsigned:
+            read = readUInt32LEHandler
+            write = writeUInt32LEHandler
+            break;
+        default:
+            read = readInt32LEHandler
+            write = writeInt32LEHandler
+            break;
+
+    }
+
+    return { read, write, size: 4 }
+
+}
 
 
 export const Int32 : BinpacketPropertyDecorator<Partial<Int32DecoratorOptions>> = 
@@ -61,34 +91,11 @@ export const Int32 : BinpacketPropertyDecorator<Partial<Int32DecoratorOptions>> 
 
     if(!options) options = {}
 
-    const propName = propertyKey as keyof typeof target
-
-    let read : BinaryReadHandler<number>,
-        write: BinaryWriteHandler<typeof target>
-
-        switch(true) {
-
-            case !!options.bigEndian && !!options.unsigned:
-                read = readUInt32BEHandler
-                write = writeUInt32BEHandler
-                break;
-            case !!options.bigEndian:
-                read = readInt32BEHandler
-                write = writeInt32BEHandler
-                break;
-            case !!options.unsigned:
-                read = readUInt32LEHandler
-                write = writeUInt32LEHandler
-                break;
-            default:
-                read = readInt32LEHandler
-                write = writeInt32LEHandler
-                break;
-    
-        }
+    const propName = propertyKey as keyof typeof target,
+        { read, write, size } = getInt32Handlers(options)
 
     stack.push({
-        propName, size: 4,
+        propName, size,
         read, write
     })
 

@@ -49,18 +49,12 @@ export const writeUInt16LEHandler : BinaryWriteHandler<Object> =
 export const writeUInt16BEHandler : BinaryWriteHandler<Object> = 
 (to, source, offset, propName) => [to.writeUint16BE(+source[propName!] || 0, offset) - offset, to]
 
-export const Int16 : BinpacketPropertyDecorator<Partial<Int16DecoratorOptions>> = 
-(options = {}) => (target, propertyKey) => 
-{
-
-    const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)!
-
-    if(!options) options = {}
-
-    const propName = propertyKey as keyof typeof target
+export const getInt16Handlers
+: (options: Partial<Int16DecoratorOptions>) => { read: BinaryReadHandler<number>, write: BinaryWriteHandler<any>, size: number }
+= (options) => {
 
     let read : BinaryReadHandler<number>,
-        write: BinaryWriteHandler<typeof target>
+        write: BinaryWriteHandler<Object>
 
     switch(true) {
 
@@ -83,8 +77,23 @@ export const Int16 : BinpacketPropertyDecorator<Partial<Int16DecoratorOptions>> 
 
     }
 
+    return { read, write, size: 2 }
+
+}
+
+export const Int16 : BinpacketPropertyDecorator<Partial<Int16DecoratorOptions>> = 
+(options = {}) => (target, propertyKey) => 
+{
+
+    const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)!
+
+    if(!options) options = {}
+
+    const propName = propertyKey as keyof typeof target,
+        { read, write, size } = getInt16Handlers(options)
+
     stack.push({
-        propName, size: 2,
+        propName, size,
         read, write
     })
 

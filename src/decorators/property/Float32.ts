@@ -2,7 +2,7 @@ import { getBinpacketMetadata } from "../../store/MetadataStore"
 import { BinpacketPropertyDecorator } from "../../types/Decorators"
 import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "../../types/TransformMetadata"
 
-interface Float32DecoratorOptions {
+export interface Float32DecoratorOptions {
 
     /**
      * Whether byte order should be BigEndian.
@@ -14,41 +14,37 @@ interface Float32DecoratorOptions {
 
 }
 
-const readFloat32LEHandler : BinaryReadHandler<number> = (from, offset) => {
+export const readFloat32LEHandler : BinaryReadHandler<number> = (from, offset) => {
 
     return [from.readFloatLE(offset), 4]
 
 }
 
-const readFloat32BEHandler : BinaryReadHandler<number> = (from, offset) => {
+export const readFloat32BEHandler : BinaryReadHandler<number> = (from, offset) => {
 
     return [from.readFloatBE(offset), 4]
 
 }
 
-const writeFloat32LEHandler : BinaryWriteHandler<Object> = (to, source, offset, propName) => {
+export const writeFloat32LEHandler : BinaryWriteHandler<Object> = (to, source, offset, propName) => {
 
     return [to.writeFloatLE(+source[propName!] || 0, offset) - offset, to]
 
 }
 
-const writeFloat32BEHandler : BinaryWriteHandler<Object> = (to, source, offset, propName) => {
+export const writeFloat32BEHandler : BinaryWriteHandler<Object> = (to, source, offset, propName) => {
 
     return [to.writeFloatBE(+source[propName!] || 0, offset) - offset, to]
 
 }
 
-export const Float32 : BinpacketPropertyDecorator<Partial<Float32DecoratorOptions>> =
-(options = {}) => (target, propertyKey) => {
-
-    const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)!
-
-    if(!options) options = {}
-
-    const propName = propertyKey as keyof typeof target
+export const getFloat32Handlers 
+: (options: Partial<Float32DecoratorOptions>) 
+=> { read: BinaryReadHandler<number>, write: BinaryWriteHandler<any>, size: number }
+= (options) => {
 
     let read : BinaryReadHandler<number>,
-        write: BinaryWriteHandler<typeof target>
+        write: BinaryWriteHandler<any>
 
     switch(true) {
 
@@ -63,8 +59,22 @@ export const Float32 : BinpacketPropertyDecorator<Partial<Float32DecoratorOption
 
     }
 
+    return { read, write, size: 4 }
+
+}
+
+export const Float32 : BinpacketPropertyDecorator<Partial<Float32DecoratorOptions>> =
+(options = {}) => (target, propertyKey) => {
+
+    const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)!
+
+    if(!options) options = {}
+
+    const propName = propertyKey as keyof typeof target,
+        { read, write, size } = getFloat32Handlers(options)
+
     stack.push({
-        propName, size: 4, read, write
+        propName, size, read, write
     })
 
 }

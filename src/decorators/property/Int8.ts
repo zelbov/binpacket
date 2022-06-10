@@ -2,7 +2,7 @@ import { getBinpacketMetadata } from "../../store/MetadataStore"
 import { BinpacketPropertyDecorator } from "../../types/Decorators"
 import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "../../types/TransformMetadata"
 
-interface Int8DecoratorOptions {
+export interface Int8DecoratorOptions {
 
      /**
       * 
@@ -17,6 +17,40 @@ interface Int8DecoratorOptions {
 
 }
 
+export const readInt8Handler : BinaryReadHandler<number> = (from, offset) => [from.readInt8(offset), 1]
+
+export const readUInt8Handler : BinaryReadHandler<number> = (from, offset) => [from.readUInt8(offset), 1]
+
+export const writeInt8Handler : BinaryWriteHandler<any> = 
+(to, source, offset, propName) => [to.writeInt8(+source[propName!] || 0, offset) - offset, to]
+
+export const writeUInt8Handler : BinaryWriteHandler<any> = 
+(to, source, offset, propName) => [to.writeUInt8(+source[propName!] || 0, offset) - offset, to]
+
+export const getInt8Handlers 
+: (options: Partial<Int8DecoratorOptions>) => { read: BinaryReadHandler<number>, write: BinaryWriteHandler<any>, size: number }
+= (options) => {
+
+    let read : BinaryReadHandler<number>,
+        write: BinaryWriteHandler<any>
+
+    switch(true) {
+
+        case !!options.unsigned:
+            read = readUInt8Handler;
+            write = writeUInt8Handler;
+            break;
+        default:
+            read = readInt8Handler;
+            write = writeInt8Handler;
+            break;
+
+    }
+
+    return { read, write, size: 1 }
+
+}
+
 export const Int8 : BinpacketPropertyDecorator<Partial<Int8DecoratorOptions>> = 
 (options = {}) => (target, propertyKey) => 
 {
@@ -27,24 +61,10 @@ export const Int8 : BinpacketPropertyDecorator<Partial<Int8DecoratorOptions>> =
 
     const propName = propertyKey as keyof typeof target
 
-    let read : BinaryReadHandler<number>,
-        write: BinaryWriteHandler<typeof target>
-
-    switch(true) {
-
-        case !!options.unsigned:
-            read = (from, offset) => [from.readUInt8(offset), 1];
-            write = (to, source, offset) => [to.writeUint8(+source[propName], offset) - offset, to];
-            break;
-        default:
-            read = (from, offset) => [from.readInt8(offset), 1];
-            write = (to, source, offset) => [to.writeInt8(+source[propName], offset) - offset, to];
-            break;
-
-    }
+    const { read, write, size } = getInt8Handlers(options)
 
     stack.push({
-        propName, size: 1,
+        propName, size,
         read, write
     })
 

@@ -49,6 +49,37 @@ export const writeUInt64LEHandler : BinaryWriteHandler<Object> =
 export const writeUInt64BEHandler : BinaryWriteHandler<Object> = 
 (to, source, offset, propName) => [to.writeBigUint64BE(BigInt(''+(source[propName!] || 0)), offset) - offset, to]
 
+export const getInt64Handlers 
+: (options: Partial<Int64DecoratorOptions>) => { read: BinaryReadHandler<bigint>, write: BinaryWriteHandler<any>, size: number }
+= (options) => {
+
+    let read : BinaryReadHandler<bigint>,
+        write: BinaryWriteHandler<any>
+
+    switch(true) {
+
+        case !!options.bigEndian && !!options.unsigned:
+            read = readUInt64BEHandler
+            write = writeUInt64BEHandler
+            break;
+        case !!options.bigEndian:
+            read = readInt64BEHandler
+            write = writeInt64BEHandler
+            break;
+        case !!options.unsigned:
+            read = readUInt64LEHandler
+            write = writeUInt64LEHandler
+            break;
+        default:
+            read = readInt64LEHandler
+            write = writeInt64LEHandler
+            break;
+
+    }
+
+    return { read, write, size: 8 }
+
+}
 
 export const Int64 : BinpacketPropertyDecorator<Partial<Int64DecoratorOptions>> = 
 (options = {}) => (target, propertyKey) => 
@@ -58,35 +89,12 @@ export const Int64 : BinpacketPropertyDecorator<Partial<Int64DecoratorOptions>> 
 
     if(!options) options = {}
 
-    const propName = propertyKey as keyof typeof target
-
-    let read : BinaryReadHandler<bigint>,
-        write: BinaryWriteHandler<typeof target>
-
-        switch(true) {
-
-            case !!options.bigEndian && !!options.unsigned:
-                read = readUInt64BEHandler
-                write = writeUInt64BEHandler
-                break;
-            case !!options.bigEndian:
-                read = readInt64BEHandler
-                write = writeInt64BEHandler
-                break;
-            case !!options.unsigned:
-                read = readUInt64LEHandler
-                write = writeUInt64LEHandler
-                break;
-            default:
-                read = readInt64LEHandler
-                write = writeInt64LEHandler
-                break;
-    
-        }
+    const propName = propertyKey as keyof typeof target,
+        { read, write, size } = getInt64Handlers(options)
 
     stack.push({
         propName,
-        size: 8,
+        size,
         read, write
     })
 
