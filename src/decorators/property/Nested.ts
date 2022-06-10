@@ -58,7 +58,7 @@ export const getNestedHandlers
 { read: BinaryReadHandler<Object>, write: BinaryWriteHandler<any>, size: (source: any) => number }
 = (options) => {
 
-    const nestedStack = getBinpacketMetadata(new options.type(...options.templateArgs!), false)
+    const nestedStack = getBinpacketMetadata(new options.type(...(options.templateArgs || [])), false)
 
     if(!nestedStack)
         throw new Error(

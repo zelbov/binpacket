@@ -31,6 +31,8 @@ export const getInt8Handlers
 : (options: Partial<Int8DecoratorOptions>) => { read: BinaryReadHandler<number>, write: BinaryWriteHandler<any>, size: number }
 = (options) => {
 
+    if(!options) options = {};
+
     let read : BinaryReadHandler<number>,
         write: BinaryWriteHandler<any>
 
