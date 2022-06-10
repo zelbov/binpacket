@@ -138,17 +138,15 @@ export const BinaryArray : BinpacketPropertyDecorator<ArrayDecoratorOptions> =
 
             readArray = (from, offset, source) => {
         
-                const endOffset = from.indexOf(0, offset),
-                    totalLength = endOffset - offset;
+                let readOffset = offset, result: any[] = []
 
-                let i = 0, result: any[] = []
-                while(i < totalLength) {
-                    const [value, length] = read(from, offset + i, source)
-                    i += length
+                while(from.readUint8(readOffset) != 0) {
+                    const [value, length] = read(from, readOffset, source)
+                    readOffset += length
                     result.push(value)
                 }
 
-                return [result, totalLength + 1]
+                return [result, readOffset - offset + 1]
         
             };
 
