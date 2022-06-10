@@ -39,7 +39,7 @@ export const parseBinary = <
         const propName : keyof ResultType | undefined = meta.propName
 
         const { read } = meta,
-            [value, length] = read(data, offset + sourceOffset)
+            [value, length] = read(data, offset + sourceOffset, obj)
 
         propName ? obj[propName] = value : null
 

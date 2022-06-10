@@ -1,5 +1,5 @@
 
-export type BinaryReadHandler<ValueType> = (from: Buffer, offset: number) => [value: ValueType, length: number]
+export type BinaryReadHandler<ValueType> = <SourceType>(from: Buffer, offset: number, source: SourceType) => [value: ValueType, length: number]
 
 export type BinaryWriteHandler<ClassType> = (
     to: Buffer,
