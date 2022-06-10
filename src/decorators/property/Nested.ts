@@ -9,7 +9,10 @@ const MISSING_PROP_INIT_ERROR =
 const MISSING_PROP_TYPE_INIT_ERROR = 
     'Missing property type initializer in @NestedBinary decorator arguments';
 
-export interface NestedDecoratorOptions {}
+export interface NestedDecoratorOptions {
+    type: (new (...args: ConstructorParameters<abstract new(...args: any) => any>) => any),
+    templateArgs?: ConstructorParameters<abstract new(...args: any) => any>
+}
 
 export const readBinaryNestedObjectHandler : 
 <PropertyType, ArgsList = ConstructorParameters<abstract new(...args: any) => PropertyType>>(
@@ -50,33 +53,47 @@ export const writeBinaryNestedObjectHandler : BinaryWriteHandler<Object> =
     return [sub.length, to]
 }
 
+export const getNestedHandlers
+: (options: NestedDecoratorOptions) => 
+{ read: BinaryReadHandler<Object>, write: BinaryWriteHandler<any>, size: (source: any) => number }
+= (options) => {
+
+    const nestedStack = getBinpacketMetadata(new options.type(...options.templateArgs!), false)
+
+    if(!nestedStack)
+        throw new Error(
+            'Nested binary structure of type '+options.type.name+' has no binary structure initializers'
+        )
+
+    const read : BinaryReadHandler<Object> = readBinaryNestedObjectHandler({ type: options.type, init: options.templateArgs }),
+        write: BinaryWriteHandler<any> = writeBinaryNestedObjectHandler,
+        size = (source: any) => nestedStack.reduce<number>((prev, curr) => 
+            prev + ((+curr.size) || (curr.size as Function)(source)), 0
+        )
+
+    return { read, write, size }
+
+}
+
+const MISSING_OPTIONS_ERROR = '@NestedBinary decorator must have options parameter provided'
+
 export const NestedBinary : BinpacketPropertyDecorator<NestedDecoratorOptions> =
-(options, propertyType, templateArgs) => 
+(options) => 
 (target, propertyKey) => 
 {
 
-    if(!propertyType)
+    if(!options) throw new Error(MISSING_OPTIONS_ERROR)
+
+    if(!options.type)
         throw new Error(MISSING_PROP_TYPE_INIT_ERROR)
 
     const stack : BinaryTransformMetadata<any, any>[] = getBinpacketMetadata(target)!
 
     const propName = propertyKey as keyof typeof target
 
-    if(!templateArgs) templateArgs = [] as ConstructorParameters<abstract new(...args: any) => typeof propertyType>
+    if(!options.templateArgs) options.templateArgs = [] as ConstructorParameters<abstract new(...args: any) => any>
 
-    const nestedStack = getBinpacketMetadata(new propertyType(...templateArgs!), false)
-
-    if(!nestedStack)
-        throw new Error(
-            'Nested binary structure of type '+propertyType.name+' has no binary structure initializers'
-        )
-        
-    const size = (source: typeof propertyType) => nestedStack.reduce<number>((prev, curr) => 
-        prev + ((+curr.size) || (curr.size as Function)(source)), 0
-    )
-
-    let read : BinaryReadHandler<Object> = readBinaryNestedObjectHandler({ type: propertyType, init: templateArgs }),
-        write: BinaryWriteHandler<typeof target> = writeBinaryNestedObjectHandler
+    const { read, write, size } = getNestedHandlers(options)
 
     stack.push({
         propName, size, read, write

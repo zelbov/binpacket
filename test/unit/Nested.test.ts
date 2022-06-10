@@ -24,7 +24,10 @@ describe('NestedBinary unit testing', () => {
         @Int32()
         baz!: number
     
-        @NestedBinary({}, Bar, ['bar constructor prop'])
+        @NestedBinary({
+            type: Bar,
+            templateArgs: ['bar constructor prop']
+        })
         bar!: Bar
     
     }
