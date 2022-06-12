@@ -10,11 +10,13 @@ import { BinaryHeader, BinaryHeaderParser, BinaryHeaderSerializer } from "./deco
 import { Float32 } from "./decorators/property/Float32";
 import { Float64 } from "./decorators/property/Float64";
 import { BinaryArray } from "./decorators/property/Array";
+import { BinarySelector, identifyBinary } from "./decorators/class/BinarySelector";
 
 export {
 
     // Class decorators
     BinaryHeader,
+    BinarySelector,
     
     // Property decorators
     Int8,
@@ -33,6 +35,7 @@ export {
     // Common functions
     parseBinary,
     serializeBinary,
+    identifyBinary,
 
     // Types
     BinaryHeaderParser,

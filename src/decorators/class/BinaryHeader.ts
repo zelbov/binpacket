@@ -5,7 +5,7 @@ import { BinaryReadHandler, BinaryTransformMetadata, BinaryWriteHandler } from "
 /**
  * A function that accepts serialized binary with header and produces headless chunk of packet 
  */
- export type BinaryHeaderParser = (serialized: Buffer) => Buffer
+export type BinaryHeaderParser = (serialized: Buffer) => Buffer
 
 /**
  * A function that accepts object and a buffer allocated for binary representation (including space for header)
