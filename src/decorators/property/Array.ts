@@ -128,7 +128,7 @@ export const BinaryArray : BinpacketPropertyDecorator<ArrayDecoratorOptions> =
                         prev + (size === 0 ? 0 : +size || (size as Function)(curr, idx)), 0
                     )
 
-                return totalSize + 1
+                return totalSize
 
             }
 

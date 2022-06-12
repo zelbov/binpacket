@@ -98,6 +98,8 @@ describe('BinaryArray unit tests', () => {
 
         expect(buffer.readUint8(10)).eq(250)
 
+        expect(buffer.length).eq(11)
+
     })
 
 })
