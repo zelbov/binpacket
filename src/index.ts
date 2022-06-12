@@ -11,6 +11,7 @@ import { Float32 } from "./decorators/property/Float32";
 import { Float64 } from "./decorators/property/Float64";
 import { BinaryArray } from "./decorators/property/Array";
 import { BinarySelector, identifyBinary } from "./decorators/class/BinarySelector";
+import { BinaryWriteStream } from "./streams/BinaryStreamWriter";
 
 export {
 
@@ -36,6 +37,9 @@ export {
     parseBinary,
     serializeBinary,
     identifyBinary,
+
+    // Streams
+    BinaryWriteStream,
 
     // Types
     BinaryHeaderParser,
