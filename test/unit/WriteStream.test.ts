@@ -33,7 +33,7 @@ describe('BinaryWriteStream unit tests', () => {
 
             binaryStream.write(obj)
 
-            binaryStream.close()
+            binaryStream.end()
 
             recvStream.close(() => {
 

@@ -1,7 +1,15 @@
 import { serializeBinary } from "../builder/Builder"
-import { WritableStreamPolyfill } from "../polyfills/WritableStream"
+import { Transform, TransformCallback } from 'stream'
 
-export class BinaryWriteStream extends WritableStreamPolyfill<Object> {
+export class BinaryWriteStream extends Transform {
+
+    _transform(chunk: any, encoding: BufferEncoding, callback: TransformCallback): void {
+        try {
+            callback(null, chunk)
+        } catch (ex) {
+            callback(ex as Error)
+        }
+    }
 
     write(obj: Object){
 
