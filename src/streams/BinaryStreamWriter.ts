@@ -1,7 +1,7 @@
 import { serializeBinary } from "../builder/Builder"
-import { WriteableStreamPolyfill } from "../polyfills/WriteStream"
+import { WritableStreamPolyfill } from "../polyfills/WritableStream"
 
-export class BinaryWriteStream extends WriteableStreamPolyfill {
+export class BinaryWriteStream extends WritableStreamPolyfill<Object> {
 
     write(obj: Object){
 
