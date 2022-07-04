@@ -10,8 +10,16 @@
     "bench": "./node_modules/.bin/mocha -r ts-node/register ./test/benchmark/*.test.ts",
     "lint": "./node_modules/.bin/eslint --ext ts"
   },
-  "author": "Zelbov",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zelbov/binpacket.git"
+  },
+  "author": "https://github.com/zelbov",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zelbov/binpacket/issues"
+  },
+  "homepage": "https://github.com/zelbov/binpacket#readme",
   "devDependencies": {
     "@types/chai": "^4.3.0",
     "@types/mocha": "^9.1.0",
