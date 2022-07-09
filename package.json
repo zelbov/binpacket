@@ -6,9 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "watch": "npx tsc --watch",
-    "test": "./node_modules/.bin/mocha -r ts-node/register ./test/unit/*.test.ts",
-    "bench": "./node_modules/.bin/mocha -r ts-node/register ./test/benchmark/*.test.ts",
-    "ci": "circleci config process .circleci/config.yml > temp/processed.yml && circleci local execute -c temp/processed.yml",
+    "ci": "circleci config process .circleci/config.yml > temp/processed.yml && circleci local execute -v $(pwd)/temp/project:/root/project -c temp/processed.yml",
     "lint": "./node_modules/.bin/eslint --ext ts",
     "postinstall": "cat package-lock.json | md5sum > package.checksum"
   },
