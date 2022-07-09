@@ -7,19 +7,36 @@ jobs:
       - image: node:16
     resource_class: small
     steps:
+
       - checkout
+
       - restore_cache:
+          name: Restore cache if available
           keys:
-            - v1-deps-{{ checksum "package.checksum" }}
+            - v1-deps-{{ checksum "package-lock.json" }}
             - v1-deps-
-      - run: npm install
+
+      - run:
+          name: Install dependencies
+          command: npm install
+
       - save_cache:
-          key: v1-deps-{{ checksum "package.checksum" }}
+          name: Save cache
+          key: v1-deps-{{ checksum "package-lock.json" }}
           paths: 
             - node_modules
-      - run: npm run lint
-      - run: npm run build
-      - run: npm test
+
+      - run:
+          name: Lint
+          command: npm run lint
+
+      - run:
+          name: Build code
+          command: npm run build
+
+      - run:
+          name: Test
+          command: npm test
 
 workflows:
   build_lint_test:
