@@ -66,6 +66,8 @@ workflows:
     jobs:
       - test
       - lint
+  ci_bench:
+    jobs:
       - request-manual:
           type: approval
       - bench:
