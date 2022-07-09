@@ -7,8 +7,7 @@
     "build": "npx tsc",
     "watch": "npx tsc --watch",
     "ci": "circleci config process .circleci/config.yml > temp/processed.yml && circleci local execute -v $(pwd)/temp/project:/root/project -c temp/processed.yml",
-    "lint": "./node_modules/.bin/eslint --ext ts",
-    "postinstall": "cat package-lock.json | md5sum > package.checksum"
+    "lint": "./node_modules/.bin/eslint --ext ts"
   },
   "repository": {
     "type": "git",
