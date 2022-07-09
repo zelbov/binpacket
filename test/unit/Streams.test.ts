@@ -57,7 +57,6 @@ describe('BinaryStreams unit tests', () => {
             recvStream.close(() => {
 
                 const wrote = readFileSync(filePath)
-                console.log(wrote)
                 expect(wrote.readUint16LE(0)).eq(STRUCT_ID)
                 expect(wrote.readInt16LE(2)).eq(1337)
                 done()
@@ -80,7 +79,6 @@ describe('BinaryStreams unit tests', () => {
 
                     binaryStream
                     .on('data', (chunk: Buffer) => {
-                        console.log({ chunk })
                         expect(chunk.readUint16LE(0)).eq(STRUCT_ID)
                         expect(chunk.readInt16LE(2)).eq(1337)
                         resolve()
@@ -93,7 +91,6 @@ describe('BinaryStreams unit tests', () => {
                     binaryStream
                     .when(Foo)
                     .on('data', ([result, len]) => {
-                        console.log({ result, len })
                         expect(Object.getPrototypeOf(result).constructor.name).eq('Foo')
                         expect(result.bar).eq(1337)
                         resolve()

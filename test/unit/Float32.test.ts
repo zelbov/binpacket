@@ -23,13 +23,9 @@ describe('Float32 unit tests', () => {
         buffer.writeFloatLE(1.337, 0)
         buffer.writeFloatBE(1.377, 4)
 
-        console.log(buffer)
-
         const [result, len] = parseBinary(buffer, Foo)
 
         obj = result
-
-        console.log(obj)
 
         // Since provided numbers are the actual double-precision numbers (64bit) in JS,
         // we should compare their single-precision representation (32bit)
@@ -42,8 +38,6 @@ describe('Float32 unit tests', () => {
     it('Transform object back to binary: should produce identical buffer of the same order', () => {
 
         const buffer = serializeBinary(obj)
-
-        console.log(buffer)
 
         expect(buffer.length).eq(8)
         expect(buffer.readFloatLE(0)).eq(Math.fround(1.337))

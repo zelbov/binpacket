@@ -31,13 +31,9 @@ describe('Int64 decorators testing', () => {
         buffer.writeBigUint64LE(42n, 16)
         buffer.writeBigUint64BE(1337n, 24)
 
-        console.log(buffer)
-
         const [result, len] = parseBinary(buffer, Foo)
 
         obj = result
-
-        console.log(obj)
 
         expect(obj.int64).eq(42n)
         expect(obj.int64be).eq(1337n)
@@ -48,11 +44,7 @@ describe('Int64 decorators testing', () => {
 
     it('Transform object back to binary: should produce identical buffer of same order', () => {
 
-        console.log(obj)
-
         const buffer = serializeBinary(obj)
-
-        console.log(buffer)
 
         expect(buffer.length).eq(32)
 

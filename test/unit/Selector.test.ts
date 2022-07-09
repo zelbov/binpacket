@@ -56,16 +56,12 @@ describe('BinarySelector unit tests', () => {
 
             const template = identifyBinary(buffer, (raw) => raw.readUint16LE(0))!
 
-            console.log({ template })
-
             expect(template).not.undefined
             expect(template.name).eq('Foo')
 
             const [result, len] = parseBinary(buffer, template)
 
             obj = result
-
-            console.log(obj)
 
             expect(len).eq(4)
             expect(obj.bar).eq(1313)
@@ -75,8 +71,6 @@ describe('BinarySelector unit tests', () => {
         it('Transform object back to binary & identify again: should match defined structure & byte order', () => {
 
             const buffer = serializeBinary(obj)
-
-            console.log(buffer)
 
             expect(buffer.length).eq(4)
 
@@ -100,16 +94,12 @@ describe('BinarySelector unit tests', () => {
 
             const template = identifyBinary(buffer, (raw) => raw.readUint16LE(0))!
 
-            console.log({ template })
-
             expect(template).not.undefined
             expect(template.name).eq('Bar')
 
             const [result, len] = parseBinary(buffer, template)
 
             obj = result
-
-            console.log(obj)
 
             expect(len).eq(6)
             expect(obj.foo).eq(1313)
@@ -119,8 +109,6 @@ describe('BinarySelector unit tests', () => {
         it('Transform object back to binary & identify again: should match defined structure & byte order', () => {
 
             const buffer = serializeBinary(obj)
-
-            console.log(buffer)
 
             expect(buffer.length).eq(6)
 
