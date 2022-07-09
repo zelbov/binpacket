@@ -5,6 +5,7 @@ jobs:
   build:
     docker:
       - image: node:16
+    resource_class: small
     steps:
       - checkout
       - restore_cache:
