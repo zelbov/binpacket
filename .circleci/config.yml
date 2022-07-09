@@ -1,44 +1,73 @@
 version: 2.1
 
-
-jobs:
-  build:
-    docker:
-      - image: node:16
-    resource_class: small
+commands:
+  deps:
     steps:
-
-      - checkout
-
       - restore_cache:
-          name: Restore cache if available
+          name: Restore dependecies cache
           keys:
             - v1-deps-{{ checksum "package-lock.json" }}
             - v1-deps-
-
       - run:
           name: Install dependencies
           command: npm install
-
       - save_cache:
-          name: Save cache
+          name: Save dependecies cache
           key: v1-deps-{{ checksum "package-lock.json" }}
           paths: 
             - node_modules
-
-      - run:
-          name: Lint
-          command: npm run lint
-
+  build:
+    steps:
       - run:
           name: Build code
           command: npm run build
 
+jobs:
+  test:
+    docker:
+      - image: node:16
+    resource_class: small
+    steps:
+      - checkout
+      - deps
+      - build
       - run:
           name: Test
           command: npm test
+      - store_test_results:
+          path: temp/test-results.xml
+  lint:
+    docker:
+      - image: node:16
+    resource_class: small
+    steps:
+      - checkout
+      - deps
+      - run:
+          name: Lint
+          command: npm run lint
+  bench:
+    docker:
+      - image: node:16
+    resource_class: small
+    steps:
+      - checkout
+      - deps
+      - build
+      - run:
+          name: Benchmarks
+          command: npm run bench
+      - store_test_results:
+          path: temp/bench-results.xml
+
 
 workflows:
-  build_lint_test:
+  ci_all:
     jobs:
-      - build
+      - test
+      - lint
+      - request-manual:
+          type: approval
+      - bench:
+          requires:
+            - request-manual
