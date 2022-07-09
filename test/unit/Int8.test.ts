@@ -23,13 +23,9 @@ describe('Int8 decorators testing', () => {
         buffer.writeInt8(42, 0)
         buffer.writeUint8(255, 1)
 
-        console.log(buffer)
-
         const [result, len] = parseBinary(buffer, Foo)
 
         obj = result
-
-        console.log(obj)
 
         expect(obj.int8).eq(42)
         expect(obj.uint8).eq(255)
@@ -38,11 +34,7 @@ describe('Int8 decorators testing', () => {
 
     it('Transform object back to binary: should produce identical buffer of same order', () => {
 
-        console.log(obj)
-
         const buffer = serializeBinary(obj)
-
-        console.log(buffer)
 
         expect(buffer.length).eq(2)
 

@@ -47,8 +47,6 @@ describe('BinaryHeader unit tests', () => {
         buffer.writeInt8(125, 2)
         buffer.writeUInt8(129, 3)
 
-        console.log(buffer)
-
         const [result, len] = parseBinary(buffer, HeadedFoo)
 
         obj = result
@@ -60,11 +58,7 @@ describe('BinaryHeader unit tests', () => {
 
     it('Transform object back to binary: should match values & contain valid header', () => {
 
-        console.log(obj)
-
         const buffer = serializeBinary(obj)
-
-        console.log(buffer)
 
         expect(buffer.length).eq(4)
 

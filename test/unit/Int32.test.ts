@@ -31,13 +31,9 @@ describe('Int32 decorators testing', () => {
         buffer.writeUint32LE(42, 8)
         buffer.writeUint32BE(1337, 12)
 
-        console.log(buffer)
-
         const [result, len] = parseBinary(buffer, Foo)
 
         obj = result
-
-        console.log(obj)
 
         expect(obj.int32).eq(42)
         expect(obj.int32be).eq(1337)
@@ -48,11 +44,7 @@ describe('Int32 decorators testing', () => {
 
     it('Transform object back to binary: should produce identical buffer of same order', () => {
 
-        console.log(obj)
-
         const buffer = serializeBinary(obj)
-
-        console.log(buffer)
 
         expect(buffer.length).eq(16)
 

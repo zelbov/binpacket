@@ -32,13 +32,9 @@ describe('String decorators support', () => {
         buffer.write('zzab', 16, 8, 'utf-8') // 8-character big endian static size string
         // total: 12 bytes
 
-        console.log(buffer)
-
         const [result, len] = parseBinary(buffer, Foo)
 
         obj = result
-
-        console.log(obj)
 
         expect(len).eq(24)
 
@@ -51,11 +47,7 @@ describe('String decorators support', () => {
 
     it('Transform object back to binary: should produce identical buffer of same order', () => {
 
-        console.log(obj)
-
         const buffer = serializeBinary(obj)
-
-        console.log(buffer)
 
         expect(buffer.length).eq(24)
         
@@ -73,8 +65,6 @@ describe('String decorators support', () => {
         // check whether remaining bytes are zeroes since the actual string is shorter than its static size
         for(let i = 20; i < 24; i++)
             expect(buffer.readUint8(i)).eq(0)
-
-        console.log(buffer.toString())
 
     })
 

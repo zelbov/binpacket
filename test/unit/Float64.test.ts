@@ -23,13 +23,9 @@ describe('Float64 unit tests', () => {
         buffer.writeDoubleLE(1.337, 0)
         buffer.writeDoubleBE(1.377, 8)
 
-        console.log(buffer)
-
         const [result, len] = parseBinary(buffer, Foo)
 
         obj = result
-
-        console.log(obj)
 
         expect(obj.bar).eq(1.337)
         expect(obj.baz).eq(1.377)
@@ -39,8 +35,6 @@ describe('Float64 unit tests', () => {
     it('Transform object back to binary: should produce identical buffer of the same order', () => {
 
         const buffer = serializeBinary(obj)
-
-        console.log(buffer)
 
         expect(buffer.length).eq(16)
         expect(buffer.readDoubleLE(0)).eq(1.337)

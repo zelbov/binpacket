@@ -56,11 +56,7 @@ describe('BinaryArray unit tests', () => {
 
         buffer.writeUint8(250, 10)
 
-        console.log(buffer)
-
         const [result, len] = parseBinary(buffer, Foo)
-
-        console.log(result, len)
 
         expect(len).eq(11)
 
@@ -82,8 +78,6 @@ describe('BinaryArray unit tests', () => {
     it('Transform object back to binary: should produce identical buffer of the same order', () => {
 
         const buffer = serializeBinary(obj)
-
-        console.log(buffer)
 
         expect(buffer.readUint8(0)).eq(2)
         
