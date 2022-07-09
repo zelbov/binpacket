@@ -3,3 +3,6 @@
 /temp
 .fuse_*
 .vscode
+.circleci
+.trash
+/*.tgz

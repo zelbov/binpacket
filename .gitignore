@@ -5,3 +5,5 @@
 /temp/*
 !/temp/README.md
 
+# Exclude npm-packed module from source control:
+/*.tgz
