@@ -6,8 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "watch": "npx tsc --watch",
-    "test": "MOCHA_FILE=temp/test-results.xml ./node_modules/.bin/mocha --reporter mocha-junit-reporter -r ts-node/register ./test/unit/*.test.ts",
-    "bench": "MOCHA_FILE=temp/bench-results.xml ./node_modules/.bin/mocha --reporter mocha-junit-reporter -r ts-node/register ./test/benchmark/*.test.ts",
+    "test": "MOCHA_FILE=temp/test-results.xml ./node_modules/.bin/mocha --reporter mocha-junit-reporter ./dist/test/unit/*.test.js",
+    "bench": "MOCHA_FILE=temp/bench-results.xml ./node_modules/.bin/mocha --reporter mocha-junit-reporter ./dist/test/benchmark/*.test.js",
     "ci": "circleci config process .circleci/config.yml > temp/processed.yml && circleci local execute -v $(pwd)/temp/project:/root/project -c temp/processed.yml",
     "lint": "./node_modules/.bin/eslint --ext ts"
   },
