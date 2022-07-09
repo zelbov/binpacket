@@ -4,10 +4,11 @@
   "description": "Binary data builder/parser with decorators support for structures definition",
   "main": "dist/index.js",
   "scripts": {
-    "build": "/node_modules/.bin/tsc",
-    "watch": "./node_modules/.bin/tsc --watch",
+    "build": "npx tsc",
+    "watch": "npx tsc --watch",
     "test": "./node_modules/.bin/mocha -r ts-node/register ./test/unit/*.test.ts",
     "bench": "./node_modules/.bin/mocha -r ts-node/register ./test/benchmark/*.test.ts",
+    "ci": "circleci config process .circleci/config.yml > temp/processed.yml && circleci local execute -c temp/processed.yml",
     "lint": "./node_modules/.bin/eslint --ext ts"
   },
   "repository": {
