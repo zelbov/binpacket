@@ -4,6 +4,10 @@
         "target": "esnext",
         "module": "esnext",
         "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "binpacket": ["./src"],
+        },
         "strict": true,
         "removeComments": false,
         "esModuleInterop": true,
@@ -21,4 +25,5 @@
         "allowJs": true
     },
     "include": ["./src", "./test"],
+    "exclude": ["node_modules", "./test/esm-aliases.mjs"]
 }

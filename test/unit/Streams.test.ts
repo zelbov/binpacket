@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { createReadStream, createWriteStream, existsSync, readFileSync, unlinkSync } from 'fs'
 import 'mocha'
 import { join } from 'path'
-import { BinaryReadStream, BinarySelector, BinaryWriteStream, Int16 } from '../../src'
+import { BinaryReadStream, BinarySelector, BinaryWriteStream, Int16 } from 'binpacket'
 
 describe('BinaryStreams unit tests', () => {
 

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import 'mocha'
-import { Int8, BinaryHeader, parseBinary, serializeBinary, BinaryHeaderParser, BinaryHeaderSerializer } from '../../src'
+import { Int8, BinaryHeader, parseBinary, serializeBinary, BinaryHeaderParser, BinaryHeaderSerializer } from 'binpacket'
 
 describe('BinaryHeader unit tests', () => {
 

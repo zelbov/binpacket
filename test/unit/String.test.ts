@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import 'mocha'
-import { BinaryString, parseBinary, serializeBinary } from '../../src'
+import { BinaryString, parseBinary, serializeBinary } from 'binpacket'
 
 describe('String decorators support', () => {
 

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import 'mocha'
-import { Int32, parseBinary, serializeBinary } from '../../src'
+import { Int32, parseBinary, serializeBinary } from 'binpacket'
 
 describe('Int32 decorators testing', () => {
 

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import 'mocha'
-import { Float64, parseBinary, serializeBinary } from '../../src'
+import { Float64, parseBinary, serializeBinary } from 'binpacket'
 
 describe('Float64 unit tests', () => {
 

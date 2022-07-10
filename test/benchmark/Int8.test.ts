@@ -1,5 +1,5 @@
 import 'mocha'
-import { Int8, parseBinary, serializeBinary } from '../../src'
+import { Int8, parseBinary, serializeBinary } from 'binpacket'
 
 describe('Int8 benchmarking', () => {
 
