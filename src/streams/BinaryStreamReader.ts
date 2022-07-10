@@ -1,4 +1,5 @@
-import { EventEmitter, Transform, TransformCallback } from "stream"
+import { EventEmitter } from "events";
+import { Transform, TransformCallback } from "stream"
 import { identifyBinary } from "../decorators/class/BinarySelector"
 import { parseBinary } from "../parser/Parser"
 
