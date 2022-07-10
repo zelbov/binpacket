@@ -6,3 +6,8 @@
 .circleci
 .trash
 /*.tgz
+/dist/test
+/src
+/test
+/README.md
+/TODO
