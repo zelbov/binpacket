@@ -1,7 +1,7 @@
 import { expect } from 'chai'
-import { createReadStream, createWriteStream, existsSync, readFileSync, unlinkSync } from 'fs'
+//import { createReadStream, createWriteStream, existsSync, readFileSync, unlinkSync } from 'fs'
 import 'mocha'
-import { join } from 'path'
+//import { join } from 'path'
 import { BinaryReadStream, BinarySelector, BinaryWriteStream, Int16 } from 'binpacket'
 
 describe('BinaryStreams unit tests', () => {
@@ -32,6 +32,17 @@ describe('BinaryStreams unit tests', () => {
 
     }
 
+    describe('Native streams pipes', () => {
+
+        it('Write binary representation of object into stream using BinaryWriteStream pipe: should produce valid buffer on the other side')
+        it('Read binary representation of object from stream using BinaryReadStream pipe: should read deserialized object')
+
+        //TODO: test BinaryReadStream behavior when parsing fragmented or incomplete data
+
+    })
+
+    //TODO: remove "path" and "fs" usage since this test is being ported into browsers aswell
+    /*
     describe('FS streams', () => {
 
         const filePath = join(process.cwd(), 'temp', 'writestream.bin')
@@ -102,7 +113,7 @@ describe('BinaryStreams unit tests', () => {
 
         })
 
-        //TODO: test BinaryReadStream behavior when parsing fragmented or incomplete data
+        
 
     })
 
@@ -112,5 +123,6 @@ describe('BinaryStreams unit tests', () => {
         it('Read binary representation of object from socket using BinaryReadStream: should read deserialized object')
 
     })
+    */
 
 })
