@@ -6,8 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "watch": "npx tsc --watch",
-    "test": "MOCHA_FILE=temp/test-results.xml ./node_modules/.bin/mocha --reporter mocha-junit-reporter ./dist/test/unit/*.test.js",
-    "bench": "MOCHA_FILE=temp/bench-results.xml ./node_modules/.bin/mocha --reporter mocha-junit-reporter ./dist/test/benchmark/*.test.js",
+    "test": "./node_modules/.bin/mocha --reporter mocha-multi-reporters --reporter-options configFile=test/config.json,cmrOutput=mocha-junit-reporter+mochaFile+test ./dist/test/unit/*.test.js",
+    "bench": "./node_modules/.bin/mocha --reporter mocha-multi-reporters --reporter-options configFile=test/config.json,cmrOutput=mocha-junit-reporter+mochaFile+bench ./dist/test/benchmark/*.test.js",
     "ci": "circleci config process .circleci/config.yml > temp/processed.yml && circleci local execute -v $(pwd)/temp/project:/root/project -c temp/processed.yml",
     "lint": "./node_modules/.bin/eslint --ext ts"
   },
@@ -30,6 +30,7 @@
     "chai": "^4.3.6",
     "mocha": "^9.2.1",
     "mocha-junit-reporter": "^2.0.2",
+    "mocha-multi-reporters": "^1.5.1",
     "ts-node": "^10.5.0",
     "typescript": "^4.7.4"
   }
