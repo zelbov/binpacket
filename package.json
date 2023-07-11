@@ -13,6 +13,9 @@
     "ci": "circleci config process .circleci/config.yml > temp/processed.yml && circleci local execute -v $(pwd)/temp/project:/root/project -c temp/processed.yml",
     "lint": "npx eslint --ext ts"
   },
+  "engines": {
+    "node": ">= 12"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zelbov/binpacket.git"
