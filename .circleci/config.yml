@@ -37,7 +37,7 @@ jobs:
           name: Test
           command: npm test
       - store_test_results:
-          path: temp/test-results.xml
+          path: test-results
   lint:
     docker:
       - image: node:12
@@ -60,7 +60,7 @@ jobs:
           name: Benchmarks
           command: npm run bench
       - store_test_results:
-          path: temp/bench-results.xml
+          path: bench-results
 
 
 workflows:
