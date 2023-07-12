@@ -7,6 +7,7 @@
         "baseUrl": ".",
         "paths": {
             "binpacket": ["./src"],
+            "binpacket/buffer-polyfill": ["./src/polyfills/BufferPolyfill.ts"]
         },
         "strict": true,
         "removeComments": false,

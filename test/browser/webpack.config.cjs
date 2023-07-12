@@ -52,7 +52,7 @@ module.exports = {
 
             // browser polyfills required for a module to work in browsers
             stream: require.resolve('stream-browserify'),
-            buffer: require.resolve('buffer/'),
+            buffer: require.resolve('binpacket/buffer-polyfill'),
 
             // test-only: external node deps resolved by Karma
             mocha: false,

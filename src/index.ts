@@ -1,3 +1,6 @@
+//buffer browser polyfill with UInt64 fixes
+if(typeof(window) != 'undefined') require('./polyfills/BufferPolyfill')
+
 export { Int8 } from "./decorators/property/Int8";
 export { Int16 } from "./decorators/property/Int16";
 export { Int32 } from "./decorators/property/Int32";
