@@ -1,5 +1,7 @@
+import { readFileSync } from 'fs';
 import path from 'path';
-import npmPackage from '../package.json' assert {type: "json"};
+//import npmPackage from '../package.json' assert {type: "json"};
+const npmPackage = JSON.parse(readFileSync(path.join(process.cwd(),'package.json')).toString())
 
 const getAliases = () => {
 
