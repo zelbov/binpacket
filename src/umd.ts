@@ -15,13 +15,11 @@ import { Float64 } from "./decorators/property/Float64";
 import { BinaryArray } from "./decorators/property/Array";
 import { BinarySelector, identifyBinary } from "./decorators/class/BinarySelector";
 
-const exports = {
+//@ts-ignore
+global.Binpacket = {
     Int8, Int16, Int32, Int64,
     Float32, Float64,
     BinaryArray, NestedBinary, BinaryString,
     BinaryHeader, BinarySelector,
     parseBinary, serializeBinary, identifyBinary,
-}
-
-//@ts-ignore
-global.Binpacket = exports;
+};

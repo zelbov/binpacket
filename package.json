@@ -6,9 +6,9 @@
   "scripts": {
     "build": "npx tsc && npx webpack --config=webpack.config.cjs",
     "watch": "npx tsc --watch",
-    "test": "npx mocha -r esm -r module-alias/register --experimental-json-modules --experimental-loader=./test/esm-aliases.mjs --es-module-specifier-resolution=node --reporter mocha-multi-reporters --reporter-options configFile=test/config.json,cmrOutput=mocha-junit-reporter+mochaFile+test ./dist/test/unit/*.test.js",
+    "test": "npx mocha -r module-alias/register --reporter mocha-multi-reporters --reporter-options configFile=test/config.json,cmrOutput=mocha-junit-reporter+mochaFile+test ./dist/test/unit/*.test.js",
     "test:browser": "npx webpack --config=test/browser/webpack.config.cjs && npx karma start test/browser/karma.conf.cjs",
-    "bench": "npx mocha -r esm -r module-alias/register --experimental-json-modules --experimental-loader=./test/esm-aliases.mjs --es-module-specifier-resolution=node --reporter mocha-multi-reporters --reporter-options configFile=test/config.json,cmrOutput=mocha-junit-reporter+mochaFile+bench ./dist/test/benchmark/*.test.js",
+    "bench": "npx mocha -r module-alias/register --es-module-specifier-resolution=node --reporter mocha-multi-reporters --reporter-options configFile=test/config.json,cmrOutput=mocha-junit-reporter+mochaFile+bench ./dist/test/benchmark/*.test.js",
     "ci": "circleci config process .circleci/config.yml > temp/processed.yml && circleci local execute -v $(pwd)/temp/project:/root/project -c temp/processed.yml",
     "clean": "rm -rf ./dist && rm -rf ./umd",
     "prep": "npm run clean && npm i && npm run build",
