@@ -9,13 +9,20 @@ export const getBinpacketMetadata :
 <ClassType extends Object>(target: ClassType, upsert?: boolean) => BinaryTransformMetadata<ClassType, any>[] | undefined =
 (target, upsert: boolean = true) => {
 
-    const proto = target.constructor.prototype
+    let storeId = 
+        target.constructor.prototype.__bin_id
 
-    if(!proto.__bin_id) 
+    if(storeId === undefined)
+        //@ts-ignore
+        storeId = target.constructor.__bin_id
+
+    if(typeof(storeId) != 'number')
         if(upsert) {
 
-            Object.defineProperty(proto, '__bin_id', {
-                value: (storeIdx++).toString(),
+            storeId = storeIdx++
+
+            Object.defineProperty(target.constructor.prototype, '__bin_id', {
+                value: storeId,
                 configurable: false,
                 enumerable: false,
                 writable: false,
@@ -27,7 +34,7 @@ export const getBinpacketMetadata :
 
         }
 
-    if(!MetadataStore[proto.__bin_id])
-        MetadataStore[proto.__bin_id] = []
-    return MetadataStore[proto.__bin_id]
+    if(!MetadataStore[storeId])
+        MetadataStore[storeId] = []
+    return MetadataStore[storeId]
 }
