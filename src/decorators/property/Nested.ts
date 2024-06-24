@@ -15,9 +15,9 @@ export interface NestedDecoratorOptions {
 }
 
 export const readBinaryNestedObjectHandler : 
-<PropertyType, ArgsList = ConstructorParameters<abstract new(...args: any) => PropertyType>>(
+<PropertyType extends Object, ArgsList = ConstructorParameters<abstract new(...args: any) => PropertyType>>(
     prop: {
-        type: new(...args: any) => PropertyType,
+        type: new(...args: any[]) => PropertyType,
         init?: ArgsList
     }) => BinaryReadHandler<Object> = 
 (

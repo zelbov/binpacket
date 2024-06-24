@@ -1,0 +1,1 @@
+export { BinaryHeaderParser, BinaryHeaderSerializer } from "../decorators/class/BinaryHeader"

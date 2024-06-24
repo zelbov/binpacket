@@ -2,8 +2,13 @@
     "compilerOptions": {
         "moduleResolution": "node",
         "target": "esnext",
-        "module": "commonjs",
+        "module": "esnext",
         "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "binpacket": ["./src/index.ts"],
+            "binpacket/types": ["./src/module_typings/index.ts"]
+        },
         "strict": true,
         "removeComments": false,
         "esModuleInterop": true,
@@ -21,4 +26,9 @@
         "allowJs": true
     },
     "include": ["./src", "./test"],
+    "exclude": [
+        "node_modules",
+        "./src/umd.ts",
+        "./test/esm-aliases.mjs", "./test/browser"
+    ]
 }

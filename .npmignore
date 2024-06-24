@@ -5,6 +5,7 @@
 .vscode
 .circleci
 .trash
+.eslintrc.js
 /*.tgz
 /dist/test
 /src

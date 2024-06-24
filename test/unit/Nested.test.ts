@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import 'mocha'
-import { Int16, Int32, NestedBinary, parseBinary, serializeBinary } from '../../src'
+import { Int16, Int32, NestedBinary, parseBinary, serializeBinary } from 'binpacket'
 
 describe('NestedBinary unit testing', () => {
 
