@@ -1,6 +1,6 @@
 {
   "name": "binpacket",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "Binary data builder/parser with decorators support for structures definition",
   "main": "dist/src/index.js",
@@ -12,7 +12,7 @@
     "bench": "npx mocha -r esm -r module-alias/register --experimental-json-modules --experimental-loader=./test/esm-aliases.mjs --es-module-specifier-resolution=node --reporter mocha-multi-reporters --reporter-options configFile=test/config.json,cmrOutput=mocha-junit-reporter+mochaFile+bench ./dist/test/benchmark/*.test.js",
     "ci": "circleci config process .circleci/config.yml > temp/processed.yml && circleci local execute -v $(pwd)/temp/project:/root/project -c temp/processed.yml",
     "clean": "rm -rf ./dist && rm -rf ./umd",
-    "prepublish": "npm run clean && npm run build",
+    "prep": "npm run clean && npm i && npm run build",
     "lint": "npx eslint --ext ts"
   },
   "engines": {
