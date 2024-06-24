@@ -1,7 +1,6 @@
 {
   "name": "binpacket",
   "version": "0.1.1",
-  "type": "module",
   "description": "Binary data builder/parser with decorators support for structures definition",
   "main": "dist/src/index.js",
   "scripts": {
