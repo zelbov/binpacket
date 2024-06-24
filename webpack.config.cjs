@@ -5,8 +5,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const bundleConfig = (mode) => ({
 
         entry: {
-            binpacket: path.join(process.cwd(), 'src', 'index.ts'),
-            'buffer-polyfill': path.join(process.cwd(), 'src', 'polyfills', 'BufferPolyfill.ts')
+            'binpacket': path.join(process.cwd(), 'src', 'umd.ts'),
         },
         output: {
             filename: `[name]${mode != 'production' ? '' : '.min'}.js`,
@@ -48,34 +47,19 @@ const bundleConfig = (mode) => ({
         resolve: {
     
             extensions: [ '.js', '.ts' ],
+            
             fullySpecified: false,
             fallback: {
-    
-                // browser polyfills required for a module to work in browsers
-                stream: require.resolve('stream-browserify'),
-                buffer: require.resolve('binpacket/buffer-polyfill'),
-    
-                // test-only: external node deps resolved by Karma
+
                 mocha: false,
                 path: false,
                 fs: false,
-                util: require.resolve('util'),
+                stream: false,
+                buffer: false
     
             },
     
-            // test-only: for projects that have a module installed via npm, providing aliases or path plugins is not required
-            plugins: [new TsconfigPathsPlugin()]
-    
         },
-    
-        plugins: [
-            
-            new webpack.ProvidePlugin({
-                process: 'process/browser',
-                Buffer: ['buffer', 'Buffer']
-            }),
-    
-        ]
     
     })
 

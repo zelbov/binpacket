@@ -6,8 +6,8 @@
         "outDir": "dist",
         "baseUrl": ".",
         "paths": {
-            "binpacket": ["./src"],
-            "binpacket/buffer-polyfill": ["./src/polyfills/BufferPolyfill.ts"]
+            "binpacket": ["./src/index.ts"],
+            "binpacket/types": ["./src/module_typings/index.ts"]
         },
         "strict": true,
         "removeComments": false,
@@ -26,5 +26,9 @@
         "allowJs": true
     },
     "include": ["./src", "./test"],
-    "exclude": ["node_modules", "./test/esm-aliases.mjs", "./test/browser"]
+    "exclude": [
+        "node_modules",
+        "./src/umd.ts",
+        "./test/esm-aliases.mjs", "./test/browser"
+    ]
 }

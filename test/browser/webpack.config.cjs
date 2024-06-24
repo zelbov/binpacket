@@ -52,13 +52,16 @@ module.exports = {
 
             // browser polyfills required for a module to work in browsers
             stream: require.resolve('stream-browserify'),
-            buffer: require.resolve('binpacket/buffer-polyfill'),
+            buffer: require.resolve('buffer'),
 
             // test-only: external node deps resolved by Karma
             mocha: false,
             path: false,
             fs: false,
             util: require.resolve('util'),
+            
+            // use UMD package loaded by test runner
+            Binpacket: false
 
         },
 
@@ -71,7 +74,8 @@ module.exports = {
         
         new webpack.ProvidePlugin({
             process: 'process/browser',
-            Buffer: ['buffer', 'Buffer']
+            Buffer: ['buffer', 'Buffer'],
+            Binpacket: 'Binpacket'
         }),
 
     ]

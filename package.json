@@ -29,8 +29,7 @@
   },
   "homepage": "https://github.com/zelbov/binpacket#readme",
   "_moduleAliases": {
-    "binpacket": "dist/src/index.js",
-    "binpacket/buffer-polyfill": "dist/src/polyfills/BufferPolyfill.js"
+    "binpacket": "dist/src/index.js"
   },
   "types": "./dist/src/index.d.ts",
   "exports": {
@@ -38,15 +37,12 @@
     "./*": null,
     "./dist": null,
     "./umd": null,
-    "./buffer-polyfill": "./dist/src/polyfills/BufferPolyfill.js"
+    "./types": "./dist/src/module_typings"
   },
   "typesVersions": {
     "*": {
       ".": [
         "./dist/src/index.d.ts"
-      ],
-      "buffer-polyfill": [
-        "./dist/src/polyfills/BufferPolyfill.d.ts"
       ],
       "./*": []
     }
