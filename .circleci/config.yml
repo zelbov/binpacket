@@ -1,75 +1,74 @@
 version: 2.1
 
-commands:
-  deps:
-    steps:
-      - restore_cache:
-          name: Restore dependecies cache
-          keys:
-            - v1-deps-{{ checksum "package-lock.json" }}
-            - v1-deps-
-      - run:
-          name: Install dependencies
-          command: npm install
-      - save_cache:
-          name: Save dependecies cache
-          key: v1-deps-{{ checksum "package-lock.json" }}
-          paths: 
-            - node_modules
-  build:
-    steps:
-      - run:
-          name: Build code
-          command: npm run build
+orbs:
+  node: circleci/node@5
+  browser-tools: circleci/browser-tools@1.4.8
 
 jobs:
-  test:
+
+  test-browser:
     docker:
-      - image: node:16
-    resource_class: small
+      - image: cimg/node:18.20-browsers
+    environment:
+      - CHROME_BIN: /usr/bin/google-chrome
+    steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Build package
+          command: npm run build
+      - run:
+          name: Run browser tests
+          command: npm run test:browser --passWithNoTests
+
+  test-node:
+    docker:
+      - image: cimg/node:18.20
     steps:
       - checkout
-      - deps
-      - build
+      - node/install-packages:
+          pkg-manager: npm
       - run:
-          name: Test
-          command: npm test
-      - store_test_results:
-          path: temp/test-results.xml
+          name: Build package
+          command: npm run build
+      - run:
+          name: Run Nde tests
+          command: npm test --passWithNoTests
+
+  build:
+    docker:
+      - image: cimg/node:18.20
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Build package
+          command: npm run build
   lint:
     docker:
-      - image: node:16
-    resource_class: small
+      - image: cimg/node:18.20
     steps:
       - checkout
-      - deps
+      - node/install-packages:
+          pkg-manager: npm
       - run:
-          name: Lint
           command: npm run lint
-  bench:
-    docker:
-      - image: node:16
-    resource_class: small
-    steps:
-      - checkout
-      - deps
-      - build
-      - run:
-          name: Benchmarks
-          command: npm run bench
-      - store_test_results:
-          path: temp/bench-results.xml
 
 
 workflows:
-  ci_all:
+  build-and-test:
     jobs:
-      - test
       - lint
-  ci_bench:
-    jobs:
-      - request-manual:
-          type: approval
-      - bench:
+      - build:
           requires:
-            - request-manual
+            - lint
+      - test-node:
+          requires:
+            - build
+      - test-browser:
+          requires:
+            - build
